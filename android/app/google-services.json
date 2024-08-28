@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "300793109936",
+    "project_id": "coupchat1",
+    "storage_bucket": "coupchat1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300793109936:android:a7931a9a9db45bac3fca75",
+        "android_client_info": {
+          "package_name": "com.example.coupchat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4BFmo2t7rYVTfkiE7EFbF0DRsWr5grvU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
