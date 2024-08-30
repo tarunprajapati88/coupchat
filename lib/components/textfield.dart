@@ -1,31 +1,37 @@
-
-
 import 'package:flutter/material.dart';
 
 class MyTextfield extends StatelessWidget {
-  const MyTextfield({super.key,});
+  final Icon icon;
+  final String name;
+  final bool obst;
+  const MyTextfield({super.key,
+  required  this.icon,
+    required this.name,
+    required this.obst
+  });
   @override
   Widget build(BuildContext context) {
-    return const TextField(
+    return TextField(
 
       decoration: InputDecoration(
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: Colors.grey
         ),
         border: InputBorder.none,
        filled: true,
-        fillColor: Colors.white30,
-        hintText: 'Email',
-        prefixIcon: Icon(Icons.mail),
-        enabledBorder: OutlineInputBorder(
+        fillColor: Colors.white12,
+        hintText: name,
+        prefixIcon: icon,
+        enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.white54,
+            color: Colors.grey,
           )
         ),
-        focusedBorder:OutlineInputBorder(
+        focusedBorder:const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.greenAccent)
         )
       ),
+      obscureText: obst,
     );
   }
 }
