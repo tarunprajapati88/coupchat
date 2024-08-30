@@ -12,7 +12,7 @@ class SignupButton extends StatelessWidget {
 
     return GestureDetector(
       onTap: (){
-
+         Navigator.pushNamed(context, '/second');;
       },
       child: Container(
 

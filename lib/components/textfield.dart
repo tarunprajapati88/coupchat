@@ -4,15 +4,16 @@ class MyTextfield extends StatelessWidget {
   final Icon icon;
   final String name;
   final bool obst;
+  final TextEditingController controller;
   const MyTextfield({super.key,
   required  this.icon,
     required this.name,
-    required this.obst
+    required this.obst,
+    required this.controller
   });
   @override
   Widget build(BuildContext context) {
     return TextField(
-
       decoration: InputDecoration(
         hintStyle: const TextStyle(
           color: Colors.grey
@@ -32,6 +33,7 @@ class MyTextfield extends StatelessWidget {
         )
       ),
       obscureText: obst,
+      controller:controller ,
     );
   }
 }
