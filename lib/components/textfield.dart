@@ -20,16 +20,21 @@ class MyTextfield extends StatelessWidget {
         ),
         border: InputBorder.none,
        filled: true,
-        fillColor: Colors.white12,
+        fillColor: Colors.grey.shade100,
         hintText: name,
         prefixIcon: icon,
+        prefixIconColor: Colors.grey,
         enabledBorder: const OutlineInputBorder(
+          borderRadius:  BorderRadius.all(Radius.circular(8)),
           borderSide: BorderSide(
-            color: Colors.grey,
-          )
+            color: Colors.white,
+            width: 2
+          ),
+
         ),
         focusedBorder:const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.greenAccent)
+          borderSide: BorderSide(color: Colors.greenAccent),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
         )
       ),
       obscureText: obst,

@@ -5,42 +5,120 @@ import '../components/login_button.dart';
 
 import '../components/textfield.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
+
+  const SignupPage({super.key});
+
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailcontroller = TextEditingController();
+
   final TextEditingController _passwordcontroller = TextEditingController();
+
   final TextEditingController _confirmpasswordcontroller = TextEditingController();
 
-   SignupPage({super.key});
-void signup(BuildContext context) async{
+  bool _isLoading = false;
+
+Future<void> signup(BuildContext context) async{
+  setState(() {
+    _isLoading = true;
+  });
     final authService =AuthService();
-    if (_passwordcontroller.text != _confirmpasswordcontroller.text) {
-      showDialog(
-        context: context,
-        builder: (context) => const AlertDialog(
-          title: Text('Passwords do not match'),
-        ),
-      );
-      return;
-    }
+
     try{
+      if (_passwordcontroller.text != _confirmpasswordcontroller.text) {
+        showDialog(
+          context: context,
+          builder: (context) => const AlertDialog(
+            title: Center(
+              child: Text('Passwords do not match',
+                style:  TextStyle(
+                  color: Colors.grey,
+                  fontSize: 20,
+
+                ),
+              ),
+            ),
+
+          ),
+        );
+        return;
+      }
       await authService.register(_emailcontroller.text, _passwordcontroller.text);
+      await  showDialog(
+          context: context,
+          barrierDismissible: true, // Allow dismiss by tapping outside the dialog
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: const Icon(
+                Icons.check_circle,
+                color: Colors.green,
+                size: 48.0,
+                            ),
+            content: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                Text(
+                'Account Created',
+                style: TextStyle(fontSize: 20.0),
+                ),
+              ],
+            ),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      child: const Text('Login now',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black
+                      ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Dismiss the dialog
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }
+      );
+
       Navigator.pushNamed(context, '/');
     }
     catch(e){
       showDialog(
         context: context,
         builder:(context)=>  AlertDialog(
-          title: Text(e.toString()),
+          title: Center(
+            child: Text(e.toString(),
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 15,
+
+              ),),
+          ),
         ),
       );
 
     }
-
+    finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
 }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade200,
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -82,13 +160,19 @@ void signup(BuildContext context) async{
                 const SizedBox(
                   height: 13,
                 ),
+
                 GestureDetector(child: const LoginButton(name: 'Sign Up', ),
                 onTap: ()=>signup(context),
                 ),
                 const SizedBox(
                   height: 7,
                 ),
-
+                if (_isLoading)
+                  const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.greenAccent,
+                    ),
+                  ),
               ],
             ),
           ),
