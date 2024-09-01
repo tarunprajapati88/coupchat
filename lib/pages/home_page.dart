@@ -1,3 +1,5 @@
+import 'package:coupchat/pages/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../components/login_button.dart';
@@ -7,11 +9,20 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  const Scaffold(
+    return  Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          LoginButton(name: 'Log Out',),
+          GestureDetector(child: LoginButton(name: 'Log Out',),
+          onTap: (){
+            FirebaseAuth.instance.signOut();
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+                  (Route<dynamic> route) => false,
+            );
+          },
+          ),
         ],
       ),
     );

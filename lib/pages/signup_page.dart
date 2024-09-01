@@ -4,6 +4,7 @@ import '../auth/auth_service.dart';
 import '../components/login_button.dart';
 
 import '../components/textfield.dart';
+import 'home_page.dart';
 
 class SignupPage extends StatefulWidget {
 
@@ -48,6 +49,10 @@ Future<void> signup(BuildContext context) async{
         return;
       }
       await authService.register(_emailcontroller.text, _passwordcontroller.text);
+      setState(() {
+        _isLoading = false;
+      });
+
       await  showDialog(
           context: context,
           barrierDismissible: true, // Allow dismiss by tapping outside the dialog
@@ -73,7 +78,7 @@ Future<void> signup(BuildContext context) async{
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
-                      child: const Text('Login now',
+                      child: const Text('Continue',
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.black
@@ -90,8 +95,11 @@ Future<void> signup(BuildContext context) async{
           }
       );
 
-      Navigator.pushNamed(context, '/');
-    }
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+            (Route<dynamic> route) => false,
+      );    }
     catch(e){
       showDialog(
         context: context,

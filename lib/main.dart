@@ -6,6 +6,8 @@ import 'package:coupchat/pages/signup_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'auth/authgate.dart';
+
 //import 'firebase_options.dart';
 
 void main()async {
@@ -24,8 +26,8 @@ const MyApp({super.key});
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-         '/': (context) => LoginPage() ,
-        '/second': (context) => SignupPage() ,
+         '/': (context) => const Authgate() ,
+        '/second': (context) => const SignupPage() ,
         '/home': (context) =>const HomePage() ,
 
       },
