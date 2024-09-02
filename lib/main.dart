@@ -1,14 +1,10 @@
 
 import 'package:coupchat/firebase_options.dart';
 import 'package:coupchat/pages/home_page.dart';
-import 'package:coupchat/pages/login_page.dart';
 import 'package:coupchat/pages/signup_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'auth/authgate.dart';
-
-//import 'firebase_options.dart';
 
 void main()async {
 WidgetsFlutterBinding.ensureInitialized();
