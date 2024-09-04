@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
       await authService.signInWithEmailPass(_emailController.text, _passwordController.text);
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) =>  HomePage()),
             (Route<dynamic> route) => false,
       );
 

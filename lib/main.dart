@@ -24,7 +24,7 @@ const MyApp({super.key});
       routes: {
          '/': (context) => const Authgate() ,
         '/second': (context) => const SignupPage() ,
-        '/home': (context) =>const HomePage() ,
+        '/home': (context) => HomePage() ,
 
       },
     );
