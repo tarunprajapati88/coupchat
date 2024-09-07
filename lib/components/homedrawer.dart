@@ -21,14 +21,29 @@ class Homedrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => const LoginPage()),
                       (Route<dynamic> route) => false,);
-              }, child: const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(Icons.logout),
-                Text('L O G O U T')
+              }, child: DecoratedBox(
 
-              ],
-            ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+
+                ),
+                child: Container(
+                padding: EdgeInsets.only(left: 10),
+                  height: 60,
+
+                  child: const Row(
+
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.logout),
+                    SizedBox(width: 10,),
+                    Text('L O G O U T')
+
+                  ],
+                              ),
+                ),
+              ),
             )],
         ),
       ),

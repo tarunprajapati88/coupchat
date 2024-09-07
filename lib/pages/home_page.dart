@@ -30,10 +30,10 @@ final ChatService _chatservice =ChatService();
               fontSize: 25,
               color: Colors.black
           ),),
-        backgroundColor: Colors.green[100],
+        backgroundColor: Colors.green.shade100,
       ),
       endDrawer:  Drawer(
-        backgroundColor: Colors.green[50],
+        backgroundColor: Colors.green.shade50,
         child: const Homedrawer(),
       ),
   body: Userlist(),
@@ -44,10 +44,10 @@ final ChatService _chatservice =ChatService();
         stream: _chatservice.getUsersStrean(),
         builder: (context,snapshot){
           if(snapshot.hasError){
-            return Text('Error');
+            return const Text('Error');
           }
           if(snapshot.connectionState==ConnectionState.waiting){
-            return Text('Loading...');
+            return const Text('Loading...');
           }
           return ListView(
             children: snapshot.data!.map<Widget>((userData)=> _buildUserListitem(userData,context)).toList(),
@@ -57,7 +57,7 @@ final ChatService _chatservice =ChatService();
   }
   Widget _buildUserListitem(Map<String,dynamic>userData,BuildContext context ){
     return Usertile(text: userData['email'], onTap: () {
-
+        Navigator.pushNamed(context, '/chatroom');
     },
 
     );

@@ -32,9 +32,9 @@ class MyTextfield extends StatelessWidget {
           ),
 
         ),
-        focusedBorder:const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.greenAccent),
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+        focusedBorder:OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.green.shade100),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         )
       ),
       obscureText: obst,

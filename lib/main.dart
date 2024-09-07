@@ -1,5 +1,6 @@
 
 import 'package:coupchat/firebase_options.dart';
+import 'package:coupchat/pages/chat_room.dart';
 import 'package:coupchat/pages/home_page.dart';
 import 'package:coupchat/pages/signup_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,7 +26,7 @@ const MyApp({super.key});
          '/': (context) => const Authgate() ,
         '/second': (context) => const SignupPage() ,
         '/home': (context) => HomePage() ,
-
+        '/chatroom': (context)=> ChatRoom()
       },
     );
   }

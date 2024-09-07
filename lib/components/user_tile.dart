@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 class Usertile extends StatelessWidget {
@@ -11,19 +11,26 @@ class Usertile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tilelen = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.green,
-          borderRadius: BorderRadius.circular(12),
-          
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.person),
-            Text(text)
-          ],
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
+        child: Container(
+          height: tilelen/12,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.person),
+              SizedBox(width:
+                20,),
+              Text(text)
+            ],
+          ),
         ),
       ),
     );
