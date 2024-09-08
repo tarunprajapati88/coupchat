@@ -4,12 +4,14 @@ class MyTextfield extends StatelessWidget {
   final Icon icon;
   final String name;
   final bool obst;
+  final FocusNode? focusNode;
   final TextEditingController controller;
   const MyTextfield({super.key,
   required  this.icon,
     required this.name,
     required this.obst,
-    required this.controller
+    required this.controller,
+    this.focusNode
   });
   @override
   Widget build(BuildContext context) {
