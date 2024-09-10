@@ -12,7 +12,6 @@ class ChatService {
         return user;
       }).toList();
     });
-
   }
   Future<void>sendMessage(String reciverId,message)async{
     final String currentUserId=_auth.currentUser!.uid;

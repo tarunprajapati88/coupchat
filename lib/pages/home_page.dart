@@ -1,8 +1,5 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../chat/chat_service.dart';
 import '../components/homedrawer.dart';
 import '../components/user_tile.dart';
@@ -10,8 +7,8 @@ import 'chat_room.dart';
 
 class HomePage extends StatelessWidget {
    HomePage({super.key});
-final ChatService _chatservice =ChatService();
-final FirebaseAuth _auth=FirebaseAuth.instance;
+      final ChatService _chatservice =ChatService();
+      final FirebaseAuth _auth=FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -61,7 +58,10 @@ final FirebaseAuth _auth=FirebaseAuth.instance;
   Widget _buildUserListitem(Map<String,dynamic>userData,BuildContext context ){
       if(userData['email']!=_auth.currentUser!.email){
         return Usertile(text: userData['email'], onTap: () {
-          Navigator.push(context,MaterialPageRoute(builder: (context)=>ChatRoom(senderID: userData['email'], reciverID: userData['uid'],)) );
+          Navigator.push(context,MaterialPageRoute(
+              builder: (context)=>ChatRoom(
+                senderID: userData['email'],
+                reciverID: userData['uid'],)) );
         },
 
 

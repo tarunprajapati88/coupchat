@@ -38,7 +38,6 @@ class _LoginPageState extends State<LoginPage> {
           style: const TextStyle(
             color: Colors.grey,
             fontSize: 15,
-
           ),),
         ),
       );
@@ -122,9 +121,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           if (_isLoading)
-            const Center(
+            Center(
               child: CircularProgressIndicator(
-                color: Colors.greenAccent,
+                color: Colors.green[100],
               ),
             ),
         ],

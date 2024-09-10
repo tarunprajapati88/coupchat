@@ -39,9 +39,8 @@ class Homedrawer extends StatelessWidget {
                     Icon(Icons.logout),
                     SizedBox(width: 10,),
                     Text('L O G O U T')
-
                   ],
-                              ),
+                  ),
                 ),
               ),
             )],

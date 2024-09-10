@@ -21,7 +21,6 @@ class Usertile extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
-
           ),
           child: Row(
             children: [

@@ -9,13 +9,11 @@ class SignupButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
     return GestureDetector(
       onTap: (){
          Navigator.pushNamed(context, '/second');
       },
       child: Container(
-
         width: screenWidth,
         height: 50,
         decoration: const BoxDecoration(
@@ -28,7 +26,6 @@ class SignupButton extends StatelessWidget {
             bottom:  BorderSide(color: Colors.greenAccent),
           )
         ),
-
         child:  Center(child: Text( name,style: const TextStyle(
           fontSize: 15,
           fontWeight:FontWeight.w500 ,

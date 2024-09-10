@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
-
 import '../auth/auth_service.dart';
 import '../components/login_button.dart';
-
 import '../components/textfield.dart';
 import 'home_page.dart';
 
 class SignupPage extends StatefulWidget {
-
   const SignupPage({super.key});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
 }
-
 class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailcontroller = TextEditingController();
-
   final TextEditingController _passwordcontroller = TextEditingController();
-
   final TextEditingController _confirmpasswordcontroller = TextEditingController();
 
   bool _isLoading = false;
@@ -28,7 +22,6 @@ Future<void> signup(BuildContext context) async{
     _isLoading = true;
   });
     final authService =AuthService();
-
     try{
       if (_passwordcontroller.text != _confirmpasswordcontroller.text) {
         showDialog(
@@ -58,9 +51,9 @@ Future<void> signup(BuildContext context) async{
           barrierDismissible: true, // Allow dismiss by tapping outside the dialog
           builder: (BuildContext context) {
             return AlertDialog(
-                title: const Icon(
+                title:  Icon(
                 Icons.check_circle,
-                color: Colors.green,
+                color: Colors.green[100],
                 size: 48.0,
                             ),
             content: const Row(
@@ -94,7 +87,6 @@ Future<void> signup(BuildContext context) async{
             );
           }
       );
-
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) =>  HomePage()),
@@ -122,7 +114,6 @@ Future<void> signup(BuildContext context) async{
       });
     }
 }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,16 +146,28 @@ Future<void> signup(BuildContext context) async{
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextfield(icon: const Icon(Icons.email_outlined), name: 'Email', obst: false, controller: _emailcontroller,),
+                MyTextfield(
+                  icon: const Icon(Icons.email_outlined),
+                  name: 'Email',
+                  obst: false,
+                  controller: _emailcontroller,),
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextfield(icon: const Icon(Icons.lock_outline_rounded), name: 'Password', obst: true, controller: _passwordcontroller,),
+                MyTextfield(
+                  icon: const Icon(Icons.lock_outline_rounded),
+                  name: 'Password',
+                  obst: true,
+                  controller: _passwordcontroller,),
                 const SizedBox(
                   height: 7,
                 ),
 
-                MyTextfield(icon: const Icon(Icons.lock_outline_rounded), name: 'Confirm Password', obst: true, controller: _confirmpasswordcontroller,),
+                MyTextfield(
+                  icon: const Icon(Icons.lock_outline_rounded),
+                  name: 'Confirm Password',
+                  obst: true,
+                  controller: _confirmpasswordcontroller,),
                 const SizedBox(
                   height: 13,
                 ),
@@ -176,9 +179,9 @@ Future<void> signup(BuildContext context) async{
                   height: 7,
                 ),
                 if (_isLoading)
-                  const Center(
+                   Center(
                     child: CircularProgressIndicator(
-                      color: Colors.greenAccent,
+                      color: Colors.green[100],
                     ),
                   ),
               ],

@@ -14,6 +14,7 @@ class Message{
     required this.message,
     required this.timestamp, }
    );
+
   Map<String,dynamic>tomap(){
     return{
       'senderId': sender,
@@ -22,6 +23,5 @@ class Message{
       'message':message,
       'timestamp':timestamp
     };
-
   }
 }
