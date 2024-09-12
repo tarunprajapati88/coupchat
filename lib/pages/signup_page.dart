@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coupchat/pages/profile%20page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../auth/auth_service.dart';
 import '../components/login_button.dart';
 import '../components/textfield.dart';
-import 'home_page.dart';
+
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -14,10 +17,11 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
   final TextEditingController _confirmpasswordcontroller = TextEditingController();
-
+ DocumentReference documentReference =FirebaseFirestore.instance.collection('Users').doc();
   bool _isLoading = false;
-
-Future<void> signup(BuildContext context) async{
+  String? uid;
+  String? mail;
+  Future<void> signup(BuildContext context) async{
   setState(() {
     _isLoading = true;
   });
@@ -41,11 +45,13 @@ Future<void> signup(BuildContext context) async{
         );
         return;
       }
-      await authService.register(_emailcontroller.text, _passwordcontroller.text);
+      UserCredential userCredential = await authService.register(_emailcontroller.text, _passwordcontroller.text,);
+      uid = userCredential.user?.uid;
+      mail= userCredential.user?.email;
       setState(() {
         _isLoading = false;
       });
-
+      DocumentReference documentReference =FirebaseFirestore.instance.collection('Users').doc(uid);
       await  showDialog(
           context: context,
           barrierDismissible: true, // Allow dismiss by tapping outside the dialog
@@ -89,7 +95,7 @@ Future<void> signup(BuildContext context) async{
       );
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) =>  HomePage()),
+        MaterialPageRoute(builder: (context) =>  ProfilePage(documerntReference: documentReference, userid: uid,)),
             (Route<dynamic> route) => false,
       );    }
     catch(e){

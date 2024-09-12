@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../chat/chat_service.dart';
@@ -9,6 +10,7 @@ class HomePage extends StatelessWidget {
    HomePage({super.key});
       final ChatService _chatservice =ChatService();
       final FirebaseAuth _auth=FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -36,10 +38,10 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.green.shade50,
         child: const Homedrawer(),
       ),
-  body: Userlist(),
+  body: userlist(),
     );
   }
-  Widget Userlist(){
+  Widget userlist(){
     return StreamBuilder(
         stream: _chatservice.getUsersStrean(),
         builder: (context,snapshot){
@@ -49,6 +51,7 @@ class HomePage extends StatelessWidget {
           if(snapshot.connectionState==ConnectionState.waiting){
             return const Text('Loading...');
           }
+
           return ListView(
             children: snapshot.data!.map<Widget>((userData)=> _buildUserListitem(userData,context)).toList(),
           );
@@ -57,12 +60,26 @@ class HomePage extends StatelessWidget {
   }
   Widget _buildUserListitem(Map<String,dynamic>userData,BuildContext context ){
       if(userData['email']!=_auth.currentUser!.email){
-        return Usertile(text: userData['email'], onTap: () {
+        return
+          Usertile(text: userData['username'], onTap: () {
           Navigator.push(context,MaterialPageRoute(
               builder: (context)=>ChatRoom(
                 senderID: userData['email'],
-                reciverID: userData['uid'],)) );
-        },
+                reciverID: userData['uid'],
+                Username: userData['username'],)) );
+        },  image:
+          userData['imageurl'] != null
+              ? Image.network(
+            userData['imageurl'], // Display the profile image if the URL exists
+            fit: BoxFit.cover,
+
+          )
+              : Image.asset(
+            'assets/avatar.png.png', // Use local placeholder image
+            fit: BoxFit.cover,
+          ),
+
+
 
 
     );

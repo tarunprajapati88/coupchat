@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
  class AuthService {
    final FirebaseAuth _auth = FirebaseAuth.instance;
    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+   String? username;
        //for login
    Future<UserCredential> signInWithEmailPass(String email, password) async {
      try {
@@ -11,7 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
            email: email, password: password);
        _firestore.collection('Users').doc(userCredential.user!.uid).set({
          'uid': userCredential.user!.uid,
-         'email': email
+         'email': email,
        });
        return userCredential;
      }
@@ -20,12 +21,13 @@ import 'package:firebase_auth/firebase_auth.dart';
      }
    }
    // for new account
-   Future<UserCredential> register(String email, password) async {
+   Future<UserCredential> register(String email, password,) async {
      try {
        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
        _firestore.collection('Users').doc(userCredential.user!.uid).set({
          'uid': userCredential.user!.uid,
-         'email': email
+         'email': email,
+
        });
        return userCredential;
      }

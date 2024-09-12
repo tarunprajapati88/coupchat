@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 class ChatRoom extends StatefulWidget {
   final String senderID;
   final String reciverID;
-    const ChatRoom({super.key,
+  final String Username;
+
+  const ChatRoom({super.key,
    required this.senderID,
-     required this.reciverID
+     required this.reciverID, required this.Username
    });
 
   @override
@@ -27,7 +29,7 @@ class _ChatRoomState extends State<ChatRoom> {
     super.initState();
     myFocusNode.addListener((){
       if(myFocusNode.hasFocus){
-        Future.delayed(const Duration(milliseconds: 500), ()=> scrolldown());
+        Future.delayed(const Duration(milliseconds: 1), ()=> scrolldown(1));
       }
     });
   }
@@ -38,9 +40,9 @@ class _ChatRoomState extends State<ChatRoom> {
     tosend.dispose();
   }
   final ScrollController _scrollController=ScrollController();
-  void scrolldown(){
+  void scrolldown( final int a){
     _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-        duration: const Duration(seconds: 1),
+        duration: Duration(milliseconds: a),
         curve: Curves.fastOutSlowIn
     );
   }
@@ -48,7 +50,7 @@ class _ChatRoomState extends State<ChatRoom> {
     if(tosend.text.isNotEmpty){
       await _chatService.sendMessage(widget.reciverID, tosend.text);
       tosend.clear();
-       scrolldown();
+      scrolldown(1);
     }
   }
 
@@ -57,7 +59,7 @@ class _ChatRoomState extends State<ChatRoom> {
 
     return Scaffold(
       backgroundColor: Colors.green[50],
-      appBar: AppBar(title: Text(widget.senderID,
+      appBar: AppBar(title: Text(widget.Username,
       style: const TextStyle(
       ),),
       backgroundColor: Colors.green[100],
@@ -84,7 +86,7 @@ Widget _buildMessageList(){
           if(snapshot.connectionState==ConnectionState.waiting){
             return const Text('loading..');
           }
-          WidgetsBinding.instance.addPostFrameCallback((_) => scrolldown());
+          WidgetsBinding.instance.addPostFrameCallback((_) => scrolldown(1));
           return ListView(
             controller: _scrollController,
             children:

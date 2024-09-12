@@ -61,6 +61,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Container(
+                    ),
                     const Text(
                       'CoupChat',
                       style: TextStyle(
