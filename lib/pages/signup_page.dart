@@ -21,6 +21,15 @@ class _SignupPageState extends State<SignupPage> {
   bool _isLoading = false;
   String? uid;
   String? mail;
+  final FocusNode _focusNode1=FocusNode();
+  final FocusNode _focusNode2=FocusNode();
+  final FocusNode _focusNode3=FocusNode();
+  void onsubmit(){
+    _focusNode2.requestFocus();
+  }
+  void onsubmit2(){
+    _focusNode3.requestFocus();
+  }
   Future<void> signup(BuildContext context) async{
   setState(() {
     _isLoading = true;
@@ -156,7 +165,10 @@ class _SignupPageState extends State<SignupPage> {
                   icon: const Icon(Icons.email_outlined),
                   name: 'Email',
                   obst: false,
-                  controller: _emailcontroller,),
+                  controller: _emailcontroller,
+                  focusNode: _focusNode1, focusNode2: _focusNode2,
+                ),
+
                 const SizedBox(
                   height: 10,
                 ),
@@ -164,7 +176,9 @@ class _SignupPageState extends State<SignupPage> {
                   icon: const Icon(Icons.lock_outline_rounded),
                   name: 'Password',
                   obst: true,
-                  controller: _passwordcontroller,),
+                  controller: _passwordcontroller,
+                  focusNode: _focusNode2, focusNode2: _focusNode3
+                ),
                 const SizedBox(
                   height: 7,
                 ),
@@ -173,7 +187,9 @@ class _SignupPageState extends State<SignupPage> {
                   icon: const Icon(Icons.lock_outline_rounded),
                   name: 'Confirm Password',
                   obst: true,
-                  controller: _confirmpasswordcontroller,),
+                  controller: _confirmpasswordcontroller,
+                focusNode: _focusNode3, focusNode2: _focusNode3,
+                ),
                 const SizedBox(
                   height: 13,
                 ),

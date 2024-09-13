@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class Usertile extends StatelessWidget {
   final String text;
- final Image? image;
+ final Widget? image;
   final void Function()? onTap;
   const Usertile({super.key,
   required this.text,

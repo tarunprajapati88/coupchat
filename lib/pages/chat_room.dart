@@ -24,6 +24,7 @@ class _ChatRoomState extends State<ChatRoom> {
   final TextEditingController tosend =TextEditingController();
   final ChatService _chatService=ChatService();
   FocusNode myFocusNode = FocusNode();
+
   @override
   void initState(){
     super.initState();
@@ -131,7 +132,7 @@ Widget _buildMessageList(){
               name: 'Message',
               obst: false,
               controller: tosend,
-            focusNode: myFocusNode,
+            focusNode: myFocusNode, focusNode2: null,
           )
           ),
           IconButton(onPressed: sendMessage, icon: const Icon(Icons.arrow_circle_up,

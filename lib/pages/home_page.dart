@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -69,13 +70,12 @@ class HomePage extends StatelessWidget {
                 Username: userData['username'],)) );
         },  image:
           userData['imageurl'] != null
-              ? Image.network(
-            userData['imageurl'], // Display the profile image if the URL exists
+              ? CachedNetworkImage(
+            imageUrl: userData['imageurl'],
             fit: BoxFit.cover,
-
           )
               : Image.asset(
-            'assets/avatar.png.png', // Use local placeholder image
+            'assets/avatar.png.png',
             fit: BoxFit.cover,
           ),
 

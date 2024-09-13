@@ -13,10 +13,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+ final FocusNode _focusNode1=FocusNode();
+  final FocusNode _focusNode2=FocusNode();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
-
+ 
   Future<void> login(BuildContext context) async {
     setState(() {
       _isLoading = true;
@@ -82,17 +84,19 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 10),
                     MyTextfield(
+                      focusNode: _focusNode1,
                       icon: const Icon(Icons.email_outlined),
                       name: 'Email',
                       obst: false,
-                      controller: _emailController,
+                      controller: _emailController, focusNode2: _focusNode2,
                     ),
                     const SizedBox(height: 10),
                     MyTextfield(
+                      focusNode: _focusNode2,
                       icon: const Icon(Icons.lock_outline_rounded),
                       name: 'Password',
                       obst: true,
-                      controller: _passwordController,
+                      controller: _passwordController, focusNode2: _focusNode2, 
                     ),
                     const SizedBox(height: 7),
                     const Row(

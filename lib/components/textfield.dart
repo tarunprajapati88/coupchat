@@ -6,12 +6,14 @@ class MyTextfield extends StatelessWidget {
   final bool obst;
   final FocusNode? focusNode;
   final TextEditingController controller;
+  final FocusNode? focusNode2;
   const MyTextfield({super.key,
   required  this.icon,
     required this.name,
     required this.obst,
     required this.controller,
-    this.focusNode
+    this.focusNode,
+    required this.focusNode2
   });
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,10 @@ class MyTextfield extends StatelessWidget {
       ),
       obscureText: obst,
       controller:controller ,
+      focusNode:focusNode ,
+      onSubmitted: (_){
+        focusNode2?.requestFocus();
+      },
     );
   }
 }

@@ -15,6 +15,7 @@ final documerntReference;
     required this.userid
   });
 
+
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
@@ -22,9 +23,10 @@ final documerntReference;
 class _ProfilePageState extends State<ProfilePage> {
   File? _image;
   bool _isLoading = false;
+
   final TextEditingController _controller =TextEditingController();
   final FirebaseStorage _storage = FirebaseStorage.instance;
-
+  final FocusNode _focusNode1=FocusNode();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       radius: 60,
                       backgroundImage: _image != null
                           ? FileImage(_image!)
-                          : const AssetImage('assets/avatar.png') as ImageProvider,
+                          : const AssetImage('assets/avatar.png.png') as ImageProvider,
                       child: _image == null
                           ? const Icon(
                         Icons.camera_alt,
@@ -62,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       bottom: 0,
                       child: Container(
                         color: Colors.black,
-                        child: Icon(
+                        child: const Icon(
                           Icons.edit,
                           size: 30, // Adjust size as needed
                           color: Colors.blue, // You can change the color as needed
@@ -77,7 +79,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   icon: const Icon(Icons.person),
                   name: 'UserName',
                   obst: false,
-                  controller: _controller),
+                  controller: _controller,
+               focusNode: _focusNode1, focusNode2: null,
+              ),
               const SizedBox(height: 10,),
               GestureDetector(
                 child: const LoginButton(
