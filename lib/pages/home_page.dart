@@ -1,12 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../chat/chat_service.dart';
 import '../components/homedrawer.dart';
 import '../components/user_tile.dart';
 import 'chat_room.dart';
-
+import '../globals.dart';
 class HomePage extends StatelessWidget {
    HomePage({super.key});
       final ChatService _chatservice =ChatService();
@@ -14,6 +13,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return  Scaffold(
       backgroundColor: Colors.green[50],
       appBar:  AppBar(
@@ -37,7 +37,7 @@ class HomePage extends StatelessWidget {
       ),
       endDrawer:  Drawer(
         backgroundColor: Colors.green.shade50,
-        child: const Homedrawer(),
+        child: Homedrawer(image: globalUserData,),
       ),
   body: userlist(),
     );
@@ -54,7 +54,10 @@ class HomePage extends StatelessWidget {
           }
 
           return ListView(
-            children: snapshot.data!.map<Widget>((userData)=> _buildUserListitem(userData,context)).toList(),
+            children: snapshot.data!.map<Widget>((userData) {
+              return _buildUserListitem(userData, context);
+            }).toList(),
+
           );
         }
     );
@@ -64,28 +67,35 @@ class HomePage extends StatelessWidget {
         return
           Usertile(text: userData['username'], onTap: () {
           Navigator.push(context,MaterialPageRoute(
-              builder: (context)=>ChatRoom(
+               builder: (context)=>ChatRoom(
                 senderID: userData['email'],
                 reciverID: userData['uid'],
-                Username: userData['username'],)) );
+                Username: userData['username'],
+                image:   ProfileImage(imageUrl: userData['imageurl']),
+
+              )) );
         },  image:
-          userData['imageurl'] != null
-              ? CachedNetworkImage(
-            imageUrl: userData['imageurl'],
-            fit: BoxFit.cover,
-          )
-              : Image.asset(
-            'assets/avatar.png.png',
-            fit: BoxFit.cover,
-          ),
+              ProfileImage(imageUrl: userData['imageurl']),
+    );
+  } else{
+        return Container();}
+      }
+}
+class ProfileImage extends StatelessWidget {
+  final String? imageUrl;
 
+  const ProfileImage({Key? key, this.imageUrl}) : super(key: key);
 
-
-
+  @override
+  Widget build(BuildContext context) {
+    return imageUrl != null
+        ? CachedNetworkImage(
+      imageUrl: imageUrl!,
+      fit: BoxFit.cover,
+    )
+        : Image.asset(
+      'assets/avatar.png.png',
+      fit: BoxFit.cover,
     );
   }
-      else{
-        return Container();
-      }
-      }
 }

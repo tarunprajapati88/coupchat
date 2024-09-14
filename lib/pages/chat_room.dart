@@ -1,18 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coupchat/chat/chat_service.dart';
-import 'package:coupchat/components/textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:coupchat/components/prfofile_photo.dart';
 
+import '../components/textfield2.dart';
 class ChatRoom extends StatefulWidget {
   final String senderID;
   final String reciverID;
   final String Username;
+  final Widget? image;
 
   const ChatRoom({super.key,
-   required this.senderID,
-     required this.reciverID, required this.Username
-   });
+    required this.senderID,
+    required this.reciverID, required this.Username, this.image
+  });
 
   @override
   State<ChatRoom> createState() => _ChatRoomState();
@@ -23,47 +25,35 @@ class _ChatRoomState extends State<ChatRoom> {
   final FirebaseAuth _auth=FirebaseAuth.instance;
   final TextEditingController tosend =TextEditingController();
   final ChatService _chatService=ChatService();
-  FocusNode myFocusNode = FocusNode();
 
-  @override
-  void initState(){
-    super.initState();
-    myFocusNode.addListener((){
-      if(myFocusNode.hasFocus){
-        Future.delayed(const Duration(milliseconds: 1), ()=> scrolldown(1));
-      }
-    });
-  }
-  @override
-  void dispose(){
-    super.dispose();
-    myFocusNode.dispose();
-    tosend.dispose();
-  }
-  final ScrollController _scrollController=ScrollController();
-  void scrolldown( final int a){
-    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: a),
-        curve: Curves.fastOutSlowIn
-    );
-  }
+
   void sendMessage()async{
     if(tosend.text.isNotEmpty){
+
       await _chatService.sendMessage(widget.reciverID, tosend.text);
       tosend.clear();
-      scrolldown(1);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
+    final tilelen = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.green[50],
-      appBar: AppBar(title: Text(widget.Username,
-      style: const TextStyle(
-      ),),
-      backgroundColor: Colors.green[100],
+      appBar: AppBar(
+        leadingWidth: tilelen/7.5,
+        titleSpacing: 0,
+        leading:   Row(
+          children: [
+            const BackButton(),
+            PrfofilePhoto(image: widget.image, height: tilelen/17, weight: tilelen/17,),
+          ],
+        ),
+        title: Text(widget.Username,
+          style: const TextStyle(
+          ),),
+
+        backgroundColor: Colors.green[100],
       ),
       body: Column(
         children: [
@@ -76,7 +66,7 @@ class _ChatRoomState extends State<ChatRoom> {
     );
   }
 
-Widget _buildMessageList(){
+  Widget _buildMessageList(){
     String senderID = _auth.currentUser!.uid;
     return StreamBuilder(
         stream: _chatService.getMessage(widget.reciverID, senderID),
@@ -87,16 +77,18 @@ Widget _buildMessageList(){
           if(snapshot.connectionState==ConnectionState.waiting){
             return const Text('loading..');
           }
-          WidgetsBinding.instance.addPostFrameCallback((_) => scrolldown(1));
+          List<DocumentSnapshot> docs = snapshot.data!.docs;
+          List<Widget> messageWidgets = docs.map((doc) => _buildMessageItem(doc)).toList().reversed.toList();
+
           return ListView(
-            controller: _scrollController,
-            children:
-              snapshot.data!.docs.map((doc)=>_buildMessageItem(doc)).toList(),
+            reverse: true,
+            children: messageWidgets,
           );
-        }
-    );
-}
- Widget  _buildMessageItem(DocumentSnapshot doc){
+              }
+          );
+
+  }
+  Widget  _buildMessageItem(DocumentSnapshot doc){
     Map<String,dynamic>data =doc.data() as Map<String,dynamic>;
     bool isCurrentuser =data['senderId']==_auth.currentUser!.uid;
     return Padding(
@@ -106,11 +98,11 @@ Widget _buildMessageList(){
         children: [
           Container(
             padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                color: isCurrentuser? Colors.green[100]:Colors.white,
-              ),
-              child: Text( data['message'],
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              color: isCurrentuser? Colors.green[100]:Colors.white,
+            ),
+            child: Text( data['message'],
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -120,26 +112,25 @@ Widget _buildMessageList(){
         ],
       ),
     );
- }
+  }
 
- Widget _builduserInput(){
+  Widget _builduserInput(){
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          Expanded(child: MyTextfield
+          Expanded(child: MyTextfield2
             (icon: const Icon(Icons.message),
-              name: 'Message',
-              obst: false,
-              controller: tosend,
-            focusNode: myFocusNode, focusNode2: null,
+            name: 'Message',
+            obst: false,
+            controller: tosend,
           )
           ),
           IconButton(onPressed: sendMessage, icon: const Icon(Icons.arrow_circle_up,
-          size: 40,
-          color: Colors.black,))
+            size: 40,
+            color: Colors.black,))
         ],
       ),
     );
- }
+  }
 }

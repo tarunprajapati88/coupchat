@@ -6,7 +6,6 @@ import '../auth/auth_service.dart';
 import '../components/login_button.dart';
 import '../components/textfield.dart';
 
-
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
 

@@ -1,7 +1,8 @@
 
-import 'dart:io';
-
+import 'package:coupchat/components/prfofile_photo.dart';
 import 'package:flutter/material.dart';
+
+import '../globals.dart';
 
 class Usertile extends StatelessWidget {
   final String text;
@@ -30,22 +31,13 @@ class Usertile extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 2, 5, 2),
-                child: Container(
-                   decoration: BoxDecoration(
-                     borderRadius: BorderRadius.circular(100)
-                   ),
-                  height:  tilelen/12,
-                  width: tilelen/12,
-                  child: ClipOval(
-                    child: image,
-                  ),
-                  ),
+                child: globalUserData=PrfofilePhoto(image: image, height: tilelen/12, weight: tilelen/12,)
                 ),
 
               const SizedBox(width:
                 20,),
               Text(text,
-              style: TextStyle(fontSize:
+              style: const TextStyle(fontSize:
               18,
               fontWeight: FontWeight.w400),
 

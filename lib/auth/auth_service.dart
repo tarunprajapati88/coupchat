@@ -10,10 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
      try {
        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
            email: email, password: password);
-       _firestore.collection('Users').doc(userCredential.user!.uid).set({
-         'uid': userCredential.user!.uid,
-         'email': email,
-       });
+
        return userCredential;
      }
      on FirebaseAuthException catch (e) {

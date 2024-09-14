@@ -1,19 +1,56 @@
+import 'package:coupchat/components/prfofile_photo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../pages/login_page.dart';
 
+
 class Homedrawer extends StatelessWidget {
-  const Homedrawer({super.key});
+final Widget? image;
+  const Homedrawer({super.key,
+     required this.image
+  });
 
   @override
   Widget build(BuildContext context) {
+    final tilelen = MediaQuery.of(context).size.width;
     return Container(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(20),
       child: Padding(
-        padding: const  EdgeInsets.fromLTRB(15, 20, 10, 20),
+        padding: const  EdgeInsets.fromLTRB(15, 60, 10, 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [const Row(),
+          children: [
+           Container(child: Column(
+             children: [
+               PrfofilePhoto(image:image , weight: tilelen/3, height: tilelen/3,),
+               SizedBox(height: 20,),
+               GestureDetector(
+                 onTap: (){
+               //   Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage(documerntReference: null, userid: null,)));
+                 },
+                 child: DecoratedBox(
+                   decoration: BoxDecoration(
+                     color: Colors.white,
+                     borderRadius: BorderRadius.circular(10),
+                   ),
+                   child: Container(
+                     padding: const EdgeInsets.only(left: 10),
+                     height: 60,
+                     child: const
+                     Row(
+                       mainAxisAlignment: MainAxisAlignment.start,
+                       children: [
+                         Icon(Icons.edit),
+                         SizedBox(width: 10,),
+                         Text('E D I T  P R O F I L E')
+                       ],
+                     ),
+                   ),
+                 ),
+               )
+             ],
+           )),
+
             GestureDetector(
               onTap: (){
                 FirebaseAuth.instance.signOut();
@@ -21,19 +58,17 @@ class Homedrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => const LoginPage()),
                       (Route<dynamic> route) => false,);
-              }, child: DecoratedBox(
-
-                decoration: BoxDecoration(
+                     },
+              child: DecoratedBox(
+              decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
-
                 ),
-                child: Container(
-                padding: EdgeInsets.only(left: 10),
+                  child: Container(
+                  padding: const EdgeInsets.only(left: 10),
                   height: 60,
-
-                  child: const Row(
-
+                  child: const
+                  Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(Icons.logout),

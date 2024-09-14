@@ -10,7 +10,7 @@ import 'home_page.dart';
 class ProfilePage extends StatefulWidget {
 final userid;
 final documerntReference;
-  ProfilePage({super.key,
+  const ProfilePage({super.key,
   required this.documerntReference,
     required this.userid
   });
