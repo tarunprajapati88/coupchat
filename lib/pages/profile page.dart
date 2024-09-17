@@ -8,13 +8,12 @@ import '../components/textfield.dart';
 import 'home_page.dart';
 
 class ProfilePage extends StatefulWidget {
-final userid;
-final documerntReference;
+ final dynamic userid;
+final  dynamic documerntReference;
   const ProfilePage({super.key,
   required this.documerntReference,
-    required this.userid
+    this.userid
   });
-
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -23,22 +22,29 @@ final documerntReference;
 class _ProfilePageState extends State<ProfilePage> {
   File? _image;
   bool _isLoading = false;
-
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _controller =TextEditingController();
+  final TextEditingController _controlleruid =TextEditingController();
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FocusNode _focusNode1=FocusNode();
+  final FocusNode _focusNode2=FocusNode();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        title: const Text('Profile'),
+          backgroundColor: Colors.green.shade100,
+        title: const Text('Create Profile'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
           child: Column(
-           // mainAxisAlignment: MainAxisAlignment.center,
+
             children: [
+              const SizedBox(
+                height: 40,
+              ),
               GestureDetector(
                 onTap: _pickImage,
                 child:Stack(
@@ -48,16 +54,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       backgroundImage: _image != null
                           ? FileImage(_image!)
                           : const AssetImage('assets/avatar.png.png') as ImageProvider,
-                      child: _image == null
-                          ? const Icon(
-                        Icons.camera_alt,
-                        size: 30,
-                        color: Colors.blue,
-                      )
-                          : null,
+
                     ),
                     Positioned(
-                      // Center the edit icon over the avatar
                       top: 90,
                       left: 90,
                       right: 0,
@@ -66,8 +65,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.black,
                         child: const Icon(
                           Icons.edit,
-                          size: 30, // Adjust size as needed
-                          color: Colors.blue, // You can change the color as needed
+                          size: 30,
+                          color: Colors.blue,
                         ),
                       ),
                     ),
@@ -77,10 +76,18 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(height: 50,),
               MyTextfield(
                   icon: const Icon(Icons.person),
-                  name: 'UserName',
+                  name: 'Name',
                   obst: false,
                   controller: _controller,
-               focusNode: _focusNode1, focusNode2: null,
+               focusNode: _focusNode1, focusNode2: _focusNode2,
+              ),
+              const SizedBox(height: 10,),
+              MyTextfield(
+                icon: const Icon(Icons.account_circle_outlined),
+                name: 'Create Unique username',
+                obst: false,
+                controller: _controlleruid,
+                focusNode: _focusNode2, focusNode2: null,
               ),
               const SizedBox(height: 10,),
               GestureDetector(
@@ -91,6 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   _saveProfile(widget.documerntReference,widget.userid);
                   },
               ),
+              const SizedBox(height: 10,),
               if (_isLoading)
                 Center(
                   child: CircularProgressIndicator(
@@ -123,18 +131,25 @@ class _ProfilePageState extends State<ProfilePage> {
         UploadTask uploadTask = storageRef.putFile(_image!);
         TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
         String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-        await documerntReference.update({
+            DocumentSnapshot documentSnapshot=await documerntReference.get();
+            Map<String,dynamic>? data =documentSnapshot.data() as  Map<String,dynamic>?;
+            String uid =data?['uid'];
+        String email =data?['email'];
+      await  _firestore.collection('Users').doc(uid).set({
+          'uid': uid,
+          'email': email,
           'username':_controller.text,
           'imageurl':downloadUrl,
-
+          'uniqueUsername':_controlleruid.text
         });
+
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomePage()),
               (Route<dynamic> route) => false,
         );
       } catch (e) {
-
+           AlertDialog(title: Text(e.toString()),);
       }
       finally {
         setState(() {
@@ -142,22 +157,39 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       }
     }
-    else {
-      try{
-      await documerntReference.update({
-        'username': _controller.text,
-        'imageurl': 'https://firebasestorage.googleapis.com/v0/b/coupchat1.appspot.com/o/avatar.png.png?alt=media&token=7a21d7fa-c6f5-4ac3-b45a-aaeca09c1275',
 
+
+    else {
+      setState(() {
+        _isLoading = true;
       });
+      try{
+        DocumentSnapshot documentSnapshot=await documerntReference.get();
+
+        Map<String,dynamic>? data =documentSnapshot.data() as  Map<String,dynamic>?;
+        String uid =data?['uid'];
+        String email =data?['email'];
+
+     await  _firestore.collection('Users').doc(uid).set({
+          'uid': uid,
+          'email': email,
+          'username':_controller.text,
+          'imageurl':'https://firebasestorage.googleapis.com/v0/b/coupchat1.appspot.com/o/avatar.png.png?alt=media&token=7a21d7fa-c6f5-4ac3-b45a-aaeca09c1275',
+
+        });
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
             (Route<dynamic> route) => false,
       );
     } catch(e){
-
+         AlertDialog(title: Text(e.toString()),);
       }
-
+      finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 }

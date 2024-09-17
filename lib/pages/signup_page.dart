@@ -42,13 +42,11 @@ class _SignupPageState extends State<SignupPage> {
             title: Center(
               child: Text('Passwords do not match',
                 style:  TextStyle(
-                  color: Colors.grey,
+                  color: Colors.black,
                   fontSize: 20,
-
                 ),
               ),
             ),
-
           ),
         );
         return;
@@ -59,10 +57,10 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         _isLoading = false;
       });
-      DocumentReference documentReference =FirebaseFirestore.instance.collection('Users').doc(uid);
+      DocumentReference documentReference =FirebaseFirestore.instance.collection('UsersRegisteration').doc(uid);
       await  showDialog(
           context: context,
-          barrierDismissible: true, // Allow dismiss by tapping outside the dialog
+          barrierDismissible: true, 
           builder: (BuildContext context) {
             return AlertDialog(
                 title:  Icon(

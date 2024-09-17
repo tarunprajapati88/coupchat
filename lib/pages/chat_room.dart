@@ -39,7 +39,7 @@ class _ChatRoomState extends State<ChatRoom> {
   Widget build(BuildContext context) {
     final tilelen = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Colors.green[50],
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         leadingWidth: tilelen/7.5,
         titleSpacing: 0,
@@ -89,6 +89,7 @@ class _ChatRoomState extends State<ChatRoom> {
 
   }
   Widget  _buildMessageItem(DocumentSnapshot doc){
+
     Map<String,dynamic>data =doc.data() as Map<String,dynamic>;
     bool isCurrentuser =data['senderId']==_auth.currentUser!.uid;
     return Padding(
@@ -126,9 +127,12 @@ class _ChatRoomState extends State<ChatRoom> {
             controller: tosend,
           )
           ),
-          IconButton(onPressed: sendMessage, icon: const Icon(Icons.arrow_circle_up,
-            size: 40,
-            color: Colors.black,))
+          IconButton(
+                highlightColor: Colors.green[100],
+                onPressed: sendMessage,
+                icon: const Icon(Icons.arrow_circle_up,
+                size: 50,
+                color: Colors.black87,))
         ],
       ),
     );

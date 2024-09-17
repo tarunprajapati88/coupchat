@@ -41,6 +41,13 @@ dependencies:
   firebase_storage: ^12.3.0
   image_picker: ^1.1.2
   cached_network_image: ^3.4.1
+  flutter_native_splash: ^2.4.1
+
+flutter_native_splash:
+  color: "#EEEEEE"
+  image: assets/CoupChat.png
+  android: true
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

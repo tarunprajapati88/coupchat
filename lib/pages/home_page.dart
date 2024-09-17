@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../chat/chat_service.dart';
 import '../components/homedrawer.dart';
 import '../components/user_tile.dart';
 import 'chat_room.dart';
-import '../globals.dart';
 class HomePage extends StatelessWidget {
    HomePage({super.key});
       final ChatService _chatservice =ChatService();
@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return  Scaffold(
-      backgroundColor: Colors.green[50],
+      backgroundColor: Colors.grey.shade200,
       appBar:  AppBar(
         actions: [
           Builder(
@@ -35,9 +35,25 @@ class HomePage extends StatelessWidget {
           ),),
         backgroundColor: Colors.green.shade100,
       ),
-      endDrawer:  Drawer(
-        backgroundColor: Colors.green.shade50,
-        child: Homedrawer(image: globalUserData,),
+      endDrawer: Drawer(
+        backgroundColor: Colors.grey.shade200,
+        child: StreamBuilder(
+          stream: _chatservice.getUsersStrean(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Text('Error');
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
+
+            final currentUserData = snapshot.data!.firstWhere(
+                  (userData) => userData['email'] == _auth.currentUser!.email,
+            );
+            DocumentReference documentReference2 =FirebaseFirestore.instance.collection('Users').doc(currentUserData['uid']);
+            return Homedrawer(image: ProfileImage(imageUrl: currentUserData['imageurl']), documentrefrence: documentReference2,);
+                    },
+        ),
       ),
   body: userlist(),
     );
@@ -63,6 +79,7 @@ class HomePage extends StatelessWidget {
     );
   }
   Widget _buildUserListitem(Map<String,dynamic>userData,BuildContext context ){
+
       if(userData['email']!=_auth.currentUser!.email){
         return
           Usertile(text: userData['username'], onTap: () {
@@ -84,7 +101,7 @@ class HomePage extends StatelessWidget {
 class ProfileImage extends StatelessWidget {
   final String? imageUrl;
 
-  const ProfileImage({Key? key, this.imageUrl}) : super(key: key);
+  const ProfileImage({super.key, this.imageUrl});
 
   @override
   Widget build(BuildContext context) {

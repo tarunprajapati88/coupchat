@@ -1,13 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coupchat/components/prfofile_photo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../pages/edit_profile.dart';
 import '../pages/login_page.dart';
 
 
 class Homedrawer extends StatelessWidget {
 final Widget? image;
+final DocumentReference documentrefrence;
   const Homedrawer({super.key,
-     required this.image
+     required this.image,
+    required this.documentrefrence
   });
 
   @override
@@ -23,10 +27,10 @@ final Widget? image;
            Container(child: Column(
              children: [
                PrfofilePhoto(image:image , weight: tilelen/3, height: tilelen/3,),
-               SizedBox(height: 20,),
+               const SizedBox(height: 20,),
                GestureDetector(
                  onTap: (){
-               //   Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage(documerntReference: null, userid: null,)));
+                   Navigator.push(context, MaterialPageRoute(builder: (context)=>const EditProfile() ));
                  },
                  child: DecoratedBox(
                    decoration: BoxDecoration(

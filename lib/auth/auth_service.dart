@@ -21,7 +21,7 @@ import 'package:firebase_auth/firebase_auth.dart';
    Future<UserCredential> register(String email, password,) async {
      try {
        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-       _firestore.collection('Users').doc(userCredential.user!.uid).set({
+       _firestore.collection('UsersRegisteration').doc(userCredential.user!.uid).set({
          'uid': userCredential.user!.uid,
          'email': email,
 
