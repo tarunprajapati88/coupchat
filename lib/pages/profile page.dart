@@ -23,9 +23,10 @@ class _ProfilePageState extends State<ProfilePage> {
   File? _image;
   bool _isLoading = false;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
   final TextEditingController _controller =TextEditingController();
   final TextEditingController _controlleruid =TextEditingController();
-  final FirebaseStorage _storage = FirebaseStorage.instance;
+
   final FocusNode _focusNode1=FocusNode();
   final FocusNode _focusNode2=FocusNode();
   @override

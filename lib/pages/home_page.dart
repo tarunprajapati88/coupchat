@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../chat/chat_service.dart';
+import '../components/chached_image.dart';
 import '../components/homedrawer.dart';
 import '../components/user_tile.dart';
 import 'chat_room.dart';
@@ -51,7 +51,11 @@ class HomePage extends StatelessWidget {
                   (userData) => userData['email'] == _auth.currentUser!.email,
             );
             DocumentReference documentReference2 =FirebaseFirestore.instance.collection('Users').doc(currentUserData['uid']);
-            return Homedrawer(image: ProfileImage(imageUrl: currentUserData['imageurl']), documentrefrence: documentReference2,);
+            return Homedrawer(
+              image: ProfileImage(imageUrl: currentUserData['imageurl']),
+              documentrefrence: documentReference2,
+              name:currentUserData['username'] ,
+              useridname:currentUserData['uniqueUsername'], imageUrl: currentUserData['imageurl'], userid: currentUserData['uid'],);
                     },
         ),
       ),
@@ -97,22 +101,4 @@ class HomePage extends StatelessWidget {
   } else{
         return Container();}
       }
-}
-class ProfileImage extends StatelessWidget {
-  final String? imageUrl;
-
-  const ProfileImage({super.key, this.imageUrl});
-
-  @override
-  Widget build(BuildContext context) {
-    return imageUrl != null
-        ? CachedNetworkImage(
-      imageUrl: imageUrl!,
-      fit: BoxFit.cover,
-    )
-        : Image.asset(
-      'assets/avatar.png.png',
-      fit: BoxFit.cover,
-    );
-  }
 }

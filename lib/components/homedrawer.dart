@@ -5,13 +5,16 @@ import 'package:flutter/material.dart';
 import '../pages/edit_profile.dart';
 import '../pages/login_page.dart';
 
-
 class Homedrawer extends StatelessWidget {
 final Widget? image;
+final String? name;
+final String? useridname;
+final String? imageUrl;
+final dynamic userid;
 final DocumentReference documentrefrence;
   const Homedrawer({super.key,
      required this.image,
-    required this.documentrefrence
+    required this.documentrefrence,required this.name,required this.useridname, required this.imageUrl, required this.userid
   });
 
   @override
@@ -25,12 +28,22 @@ final DocumentReference documentrefrence;
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
            Container(child: Column(
+             mainAxisAlignment: MainAxisAlignment.center,
              children: [
                PrfofilePhoto(image:image , weight: tilelen/3, height: tilelen/3,),
+               Text('~'+ useridname!,
+               style: TextStyle(
+                 fontSize: 25
+               ),),
                const SizedBox(height: 20,),
                GestureDetector(
                  onTap: (){
-                   Navigator.push(context, MaterialPageRoute(builder: (context)=>const EditProfile() ));
+                   Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                       EditProfile(documentReference: documentrefrence,
+                           oldname: name,
+                           oldnameid: useridname,
+                           imageUrl:imageUrl,
+                           userid: userid) ));
                  },
                  child: DecoratedBox(
                    decoration: BoxDecoration(
