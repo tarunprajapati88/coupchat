@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) => AlertDialog(
           title: Text(e.toString(),
           style: const TextStyle(
-            color: Colors.grey,
+
             fontSize: 15,
           ),),
         ),
@@ -63,8 +63,6 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                    ),
                     const Text(
                       'CoupChat',
                       style: TextStyle(
@@ -127,9 +125,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           if (_isLoading)
-            Center(
-              child: CircularProgressIndicator(
-                color: Colors.green[100],
+            IgnorePointer(
+              ignoring: !_isLoading,
+              child: const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.blueAccent,
+                  backgroundColor: Colors.black,
+                ),
               ),
             ),
         ],

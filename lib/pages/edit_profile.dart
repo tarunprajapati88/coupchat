@@ -4,9 +4,10 @@ import 'package:coupchat/components/textfield2.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:path_provider/path_provider.dart';
 import '../components/login_button.dart';
 import 'home_page.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class EditProfile extends StatefulWidget {
    final String? oldname;
@@ -37,30 +38,32 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[200],
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: const Text('Edit Profile'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: SingleChildScrollView(
-            child: Column(
+      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: const Text('Edit Profile'),
+      ),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-
                 children: [
-                  const SizedBox(height: 40,),
+                  const SizedBox(height: 40),
                   GestureDetector(
                     onTap: _pickImage,
                     child: Stack(
                       children: [
                         CircleAvatar(
-                            radius: 60,
-                            backgroundImage: _image != null
-                                ? FileImage(_image!)
-                                : NetworkImage(widget.imageUrl!) as ImageProvider
+                          radius: 60,
+                          backgroundImage: _image != null
+                              ? FileImage(_image!)
+                              : NetworkImage(widget.imageUrl!) as ImageProvider,
                         ),
                         Positioned(
                           top: 90,
@@ -81,51 +84,86 @@ class _EditProfileState extends State<EditProfile> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 40,),
+                  const SizedBox(height: 40),
                   MyTextfield2(
                     icon: const Icon(Icons.person),
                     name: 'Edit Name',
                     obst: false,
                     controller: _controller,
                   ),
-                  const SizedBox(height: 10,),
+                  const SizedBox(height: 10),
                   MyTextfield2(
                     icon: const Icon(Icons.account_circle_outlined),
                     name: 'Edit Unique username',
                     obst: false,
                     controller: _controlleruid,
                   ),
-                  const SizedBox(height: 10,),
+                  const SizedBox(height: 10),
                   GestureDetector(
                     child: const LoginButton(
-                      name: 'Done',
+                      name: 'Save',
                     ),
                     onTap: () {
                       _saveProfile(widget.documentReference, widget.userid);
                     },
                   ),
-              const SizedBox(height: 10,),
-              if (_isLoading)
-          Center(
-        child: CircularProgressIndicator(
-        color: Colors.green[100],
-        ),)
-                ]
+                ],
+              ),
             ),
           ),
-        )
+          if (_isLoading)
+            IgnorePointer(
+              ignoring: !_isLoading,
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.blueAccent,
+                    backgroundColor: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
+
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
-    final XFile? pickedImage = await picker.pickImage(
-        source: ImageSource.gallery);
+    final XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {
       setState(() {
-        _image = File(pickedImage.path);
+        _isLoading = true;
       });
+
+      final imageFile = File(pickedImage.path);
+      final directory = await getTemporaryDirectory();
+      final targetPath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      try {
+        final compressedImage = await FlutterImageCompress.compressAndGetFile(
+          imageFile.path,
+          targetPath,
+          quality: 60,
+         // minWidth: 800,
+         // minHeight: 600,
+        );
+       final compressedImageFILE=File(compressedImage!.path);
+        setState(() {
+          _image = compressedImageFILE ;
+          _isLoading = false;
+        });
+            } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error during compression: ${e.toString()}")),
+        );
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -183,6 +221,4 @@ class _EditProfileState extends State<EditProfile> {
       }
     }
   }
-
-
 }

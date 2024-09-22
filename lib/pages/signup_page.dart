@@ -130,83 +130,96 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(13.0),
-            child: Column(
-
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('CoupChat',
-                  style: TextStyle(
-                    fontFamily: 'PlaywriteCU',
-                    fontSize: 40,
-                    color: Colors.black,
-
-                  ),),
-                const SizedBox(
-                  height: 70,
-                ),
-                const Text('Create a new account !!',
-                  style: TextStyle(
-                    fontFamily: 'PlaywriteCU',
-                    fontSize: 17,
-                    color: Colors.black,
-
-                  ),),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextfield(
-                  icon: const Icon(Icons.email_outlined),
-                  name: 'Email',
-                  obst: false,
-                  controller: _emailcontroller,
-                  focusNode: _focusNode1, focusNode2: _focusNode2,
-                ),
-
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextfield(
-                  icon: const Icon(Icons.lock_outline_rounded),
-                  name: 'Password',
-                  obst: true,
-                  controller: _passwordcontroller,
-                  focusNode: _focusNode2, focusNode2: _focusNode3
-                ),
-                const SizedBox(
-                  height: 7,
-                ),
-
-                MyTextfield(
-                  icon: const Icon(Icons.lock_outline_rounded),
-                  name: 'Confirm Password',
-                  obst: true,
-                  controller: _confirmpasswordcontroller,
-                focusNode: _focusNode3, focusNode2: _focusNode3,
-                ),
-                const SizedBox(
-                  height: 13,
-                ),
-
-                GestureDetector(child: const LoginButton(name: 'Sign Up', ),
-                onTap: ()=>signup(context),
-                ),
-                const SizedBox(
-                  height: 7,
-                ),
-                if (_isLoading)
-                   Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.green[100],
-                    ),
+      body: Stack(
+        children:[
+          
+          Center(
+            child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(13.0),
+              child: Column(
+            
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('CoupChat',
+                    style: TextStyle(
+                      fontFamily: 'PlaywriteCU',
+                      fontSize: 40,
+                      color: Colors.black,
+            
+                    ),),
+                  const SizedBox(
+                    height: 70,
                   ),
-              ],
+                  const Text('Create a new account !!',
+                    style: TextStyle(
+                      fontFamily: 'PlaywriteCU',
+                      fontSize: 17,
+                      color: Colors.black,
+            
+                    ),),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  MyTextfield(
+                    icon: const Icon(Icons.email_outlined),
+                    name: 'Email',
+                    obst: false,
+                    controller: _emailcontroller,
+                    focusNode: _focusNode1, focusNode2: _focusNode2,
+                  ),
+            
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  MyTextfield(
+                    icon: const Icon(Icons.lock_outline_rounded),
+                    name: 'Password',
+                    obst: true,
+                    controller: _passwordcontroller,
+                    focusNode: _focusNode2, focusNode2: _focusNode3
+                  ),
+                  const SizedBox(
+                    height: 7,
+                  ),
+            
+                  MyTextfield(
+                    icon: const Icon(Icons.lock_outline_rounded),
+                    name: 'Confirm Password',
+                    obst: true,
+                    controller: _confirmpasswordcontroller,
+                  focusNode: _focusNode3, focusNode2: _focusNode3,
+                  ),
+                  const SizedBox(
+                    height: 13,
+                  ),
+            
+                  GestureDetector(child: const LoginButton(name: 'Sign Up', ),
+                  onTap: ()=>signup(context),
+                  ),
+                  const SizedBox(
+                    height: 7,
+                  ),
+
+                ],
+              ),
+            ),
             ),
           ),
-        ),
+          if (_isLoading)
+            IgnorePointer(
+              ignoring: !_isLoading,
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.blueAccent,
+                    backgroundColor: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+    ]
       ),
     );
   }

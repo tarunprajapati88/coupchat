@@ -2,10 +2,13 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import '../components/login_button.dart';
 import '../components/textfield.dart';
 import 'home_page.dart';
+
 
 class ProfilePage extends StatefulWidget {
  final dynamic userid;
@@ -37,89 +40,132 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundColor: Colors.green.shade100,
         title: const Text('Create Profile'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Column(
+      body: Stack(
+        children:[ SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+              child: Column(
 
-            children: [
-              const SizedBox(
-                height: 40,
-              ),
-              GestureDetector(
-                onTap: _pickImage,
-                child:Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 60,
-                      backgroundImage: _image != null
-                          ? FileImage(_image!)
-                          : const AssetImage('assets/avatar.png.png') as ImageProvider,
-
-                    ),
-                    Positioned(
-                      top: 90,
-                      left: 90,
-                      right: 0,
-                      bottom: 0,
-                      child: Container(
-                        color: Colors.black,
-                        child: const Icon(
-                          Icons.edit,
-                          size: 30,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              ),
-              const SizedBox(height: 50,),
-              MyTextfield(
-                  icon: const Icon(Icons.person),
-                  name: 'Name',
-                  obst: false,
-                  controller: _controller,
-               focusNode: _focusNode1, focusNode2: _focusNode2,
-              ),
-              const SizedBox(height: 10,),
-              MyTextfield(
-                icon: const Icon(Icons.account_circle_outlined),
-                name: 'Create Unique username',
-                obst: false,
-                controller: _controlleruid,
-                focusNode: _focusNode2, focusNode2: null,
-              ),
-              const SizedBox(height: 10,),
-              GestureDetector(
-                child: const LoginButton(
-                  name: 'Done',
-                ),
-                onTap: (){
-                  _saveProfile(widget.documerntReference,widget.userid);
-                  },
-              ),
-              const SizedBox(height: 10,),
-              if (_isLoading)
-                Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.green[100],
+                children: [
+                  const SizedBox(
+                    height: 40,
                   ),
-                ),
-            ],
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child:Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 60,
+                          backgroundImage: _image != null
+                              ? FileImage(_image!)
+                              : const AssetImage('assets/avatar.png.png') as ImageProvider,
+
+                        ),
+                        Positioned(
+                          top: 90,
+                          left: 90,
+                          right: 0,
+                          bottom: 0,
+                          child: ClipOval(
+                            child: Container(
+                              color: Colors.black,
+                              child: const Icon(
+                                Icons.edit,
+                                size: 30,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ),
+                  const SizedBox(height: 50,),
+                  MyTextfield(
+                      icon: const Icon(Icons.person),
+                      name: 'Name',
+                      obst: false,
+                      controller: _controller,
+                   focusNode: _focusNode1, focusNode2: _focusNode2,
+                  ),
+                  const SizedBox(height: 10,),
+                  MyTextfield(
+                    icon: const Icon(Icons.account_circle_outlined),
+                    name: 'Create Unique username',
+                    obst: false,
+                    controller: _controlleruid,
+                    focusNode: _focusNode2, focusNode2: null,
+                  ),
+                  const SizedBox(height: 10,),
+                  GestureDetector(
+                    child: const LoginButton(
+                      name: 'Done',
+                    ),
+                    onTap: (){
+                      _saveProfile(widget.documerntReference,widget.userid);
+                      },
+                  ),
+                  const SizedBox(height: 10,),
+
+                ],
+              ),
+            ),
           ),
         ),
+          if (_isLoading)
+            IgnorePointer(
+              ignoring: !_isLoading,
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.blueAccent,
+                    backgroundColor: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+      ]
+
       ),
     );
   }
+
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {
       setState(() {
-        _image = File(pickedImage.path);
+        _isLoading = true;
       });
+
+      final imageFile = File(pickedImage.path);
+      final directory = await getTemporaryDirectory();
+      final targetPath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      try {
+        final compressedImage = await FlutterImageCompress.compressAndGetFile(
+          imageFile.path,
+          targetPath,
+          quality: 60,
+        //  minWidth: 800,
+        //  minHeight: 600,
+        );
+        final compressedImageFILE=File(compressedImage!.path);
+        setState(() {
+          _image = compressedImageFILE ;
+          _isLoading = false;
+        });
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error during compression: ${e.toString()}")),
+        );
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
   Future<void> _saveProfile(DocumentReference documerntReference,String userid) async {
@@ -176,7 +222,7 @@ class _ProfilePageState extends State<ProfilePage> {
           'email': email,
           'username':_controller.text,
           'imageurl':'https://firebasestorage.googleapis.com/v0/b/coupchat1.appspot.com/o/avatar.png.png?alt=media&token=7a21d7fa-c6f5-4ac3-b45a-aaeca09c1275',
-
+          'uniqueUsername':_controlleruid.text
         });
       Navigator.pushAndRemoveUntil(
         context,
