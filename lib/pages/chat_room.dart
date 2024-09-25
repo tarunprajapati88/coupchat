@@ -3,6 +3,7 @@ import 'package:coupchat/chat/chat_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:coupchat/components/prfofile_photo.dart';
+import 'package:intl/intl.dart';
 
 import '../components/textfield2.dart';
 class ChatRoom extends StatefulWidget {
@@ -92,6 +93,8 @@ class _ChatRoomState extends State<ChatRoom> {
 
     Map<String,dynamic>data =doc.data() as Map<String,dynamic>;
     bool isCurrentuser =data['senderId']==_auth.currentUser!.uid;
+    DateTime dateTime = data['timestamp'].toDate();
+    String formattedTime = DateFormat('hh:mm a').format(dateTime);
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
       child: Column(
@@ -103,18 +106,30 @@ class _ChatRoomState extends State<ChatRoom> {
               borderRadius: BorderRadius.circular(18),
               color: isCurrentuser? Colors.green[100]:Colors.white,
             ),
-            child: Text( data['message'],
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-              ),),
+            child: Column(
+              crossAxisAlignment: isCurrentuser?CrossAxisAlignment.end:CrossAxisAlignment.end,
+              children: [
+                Text( data['message'],
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),),
+
+
+
+                     Text(formattedTime,
+                       style: const TextStyle(
+                           fontSize: 10
+                       ),),
+                  //   Icon(Icons.check_circle_outlined)
+              ],
+            ),
           ),
         ],
       ),
     );
   }
-
   Widget _builduserInput(){
     return Padding(
       padding: const EdgeInsets.all(8.0),

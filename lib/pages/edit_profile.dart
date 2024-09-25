@@ -129,7 +129,6 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
@@ -205,7 +204,6 @@ class _EditProfileState extends State<EditProfile> {
           'username': _controller.text,
           'uniqueUsername': _controlleruid.text
         });
-
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomePage()),
