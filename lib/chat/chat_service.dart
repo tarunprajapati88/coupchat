@@ -13,7 +13,7 @@ class ChatService {
       }).toList();
     });
   }
-  Future<void>sendMessage(String reciverId,message)async{
+  Future<DocumentReference>sendMessage(String reciverId,message, bool seen)async{
     final String currentUserId=_auth.currentUser!.uid;
     final String currentUserEmail=_auth.currentUser!.email!;
     final Timestamp timestamp=Timestamp.now();
@@ -23,16 +23,18 @@ class ChatService {
      senderEmail: currentUserEmail,
      reciversID: reciverId,
      message: message,
-     timestamp: timestamp
+     timestamp: timestamp,
+     seen: seen
  );
  List<String>ids =[currentUserId,reciverId];
  ids.sort();
  String chatroomId =ids.join('_');
- await _firestore
+    DocumentReference docRef= await _firestore
      .collection('chat_rooms')
      .doc(chatroomId)
      .collection('message')
      .add(newMessage.tomap());
+    return docRef;
 }
 Stream<QuerySnapshot>getMessage(String userID,otheruserID){
   List<String>ids =[userID,otheruserID];
