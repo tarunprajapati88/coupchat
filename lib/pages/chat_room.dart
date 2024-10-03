@@ -29,7 +29,6 @@ class _ChatRoomState extends State<ChatRoom> {
   final TextEditingController tosend = TextEditingController();
   final ChatService _chatService = ChatService();
   DocumentReference? messageReff;
-
   void sendMessage() async {
     if (tosend.text.isNotEmpty) {
       DocumentReference messageRef = await _chatService.sendMessage(widget.reciverID, tosend.text, false);
@@ -39,7 +38,6 @@ class _ChatRoomState extends State<ChatRoom> {
       });
     }
   }
-
   void updateSeenStatus(DocumentReference messageRef) async {
     await messageRef.update({'seen': true});
   }
@@ -132,15 +130,16 @@ class _ChatRoomState extends State<ChatRoom> {
                   data['message'],
                   style: const TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w400,
                     color: Colors.black,
                   ),
                 ),
                 Text(
                   formattedTime,
                   style: TextStyle(
+                    fontWeight: FontWeight.w500,
                     fontSize: 10,
-                    color: isCurrentuser ? (isMsgseen ? Colors.blueAccent : Colors.black) : Colors.black,
+                    color: isCurrentuser ? (isMsgseen ? Colors.green: Colors.black87) : Colors.grey,
                   ),
                 ),
               ],
@@ -150,7 +149,6 @@ class _ChatRoomState extends State<ChatRoom> {
       ),
     );
   }
-
   Widget _builduserInput() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -163,14 +161,28 @@ class _ChatRoomState extends State<ChatRoom> {
                 obst: false,
                 controller: tosend,
               )),
-          IconButton(
-              highlightColor: Colors.green[100],
-              onPressed: sendMessage,
-              icon: const Icon(
-                Icons.arrow_circle_up,
-                size: 50,
-                color: Colors.black87,
-              ))
+
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+              child: Container(
+                padding: const EdgeInsets.all(1),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.green[100],
+
+                ),
+
+                child: IconButton(
+                    highlightColor: Colors.green,
+                    onPressed: sendMessage,
+                    icon: const Icon(
+                      Icons.send_sharp,
+                      size: 22,
+                      color: Colors.black87,
+                    )),
+              ),
+            ),
+
         ],
       ),
     );
