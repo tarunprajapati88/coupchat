@@ -50,7 +50,7 @@ dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon.png"
+  image_path: "assets/splashimg.png"
 
 
 flutter_native_splash:

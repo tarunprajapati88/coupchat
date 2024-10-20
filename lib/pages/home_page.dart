@@ -5,17 +5,44 @@ import '../chat/chat_service.dart';
 import '../components/chached_image.dart';
 import '../components/homedrawer.dart';
 import '../components/user_tile.dart';
+import 'Searchpage.dart';
 import 'chat_room.dart';
-class HomePage extends StatelessWidget {
-   HomePage({super.key});
+class HomePage extends StatefulWidget {
+   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
       final ChatService _chatservice =ChatService();
+
       final FirebaseAuth _auth=FirebaseAuth.instance;
+
+   int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
 
     return  Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      bottomNavigationBar: NavigationBar(
+        backgroundColor: Colors.grey[200],
+        selectedIndex:currentPageIndex ,
+        indicatorColor: Colors.grey[350],
+        destinations: const <Widget>[
+        NavigationDestination(
+            selectedIcon: Icon(Icons.message),
+            icon: Icon(Icons.message_outlined), label: 'Chats'),
+        NavigationDestination(
+          icon: Icon(Icons.person_add_alt),
+            selectedIcon: Icon(Icons.person_add_alt_1), label: 'Add Users')
+      ],
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },),
+      backgroundColor: Colors.grey.shade100,
       appBar:  AppBar(
         actions: [
           Builder(
@@ -30,10 +57,10 @@ class HomePage extends StatelessWidget {
           style: TextStyle(
               fontFamily: 'PlaywriteCU',
               fontWeight: FontWeight.w700,
-              fontSize: 25,
+              fontSize: 20,
               color: Colors.black
           ),),
-        backgroundColor: Colors.green.shade100,
+       backgroundColor: Colors.grey[300],
       ),
       endDrawer: Drawer(
         backgroundColor: Colors.grey.shade200,
@@ -59,9 +86,16 @@ class HomePage extends StatelessWidget {
                     },
         ),
       ),
-  body: userlist(),
+  body: IndexedStack(
+    index: currentPageIndex,
+    children: <Widget>[
+      userlist(),
+      Searchpage(),
+    ],
+  ),
     );
   }
+
   Widget userlist(){
     return StreamBuilder(
         stream: _chatservice.getUsersStrean(),
@@ -82,6 +116,7 @@ class HomePage extends StatelessWidget {
         }
     );
   }
+
   Widget _buildUserListitem(Map<String,dynamic>userData,BuildContext context ){
 
       if(userData['email']!=_auth.currentUser!.email){

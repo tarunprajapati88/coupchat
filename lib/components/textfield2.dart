@@ -23,7 +23,7 @@ class MyTextfield2 extends StatelessWidget {
           ),
           border: InputBorder.none,
           filled: true,
-          fillColor: Colors.grey.shade100,
+          fillColor: Colors.grey.shade50,
           hintText: name,
           prefixIcon: icon,
           prefixIconColor: Colors.grey,
@@ -35,7 +35,7 @@ class MyTextfield2 extends StatelessWidget {
             ),
           ),
           focusedBorder:OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.green.shade100),
+            borderSide: BorderSide(color: Colors.grey.shade300),
             borderRadius: const BorderRadius.all(Radius.circular(8)),
           )
       ),

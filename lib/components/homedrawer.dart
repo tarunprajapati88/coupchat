@@ -20,6 +20,7 @@ final DocumentReference documentrefrence;
   @override
   Widget build(BuildContext context) {
     final tilelen = MediaQuery.of(context).size.width;
+
     return Container(
       padding: const EdgeInsets.all(20),
       child: Padding(
@@ -27,12 +28,12 @@ final DocumentReference documentrefrence;
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-           Container(child: Column(
+           Column(
              mainAxisAlignment: MainAxisAlignment.center,
              children: [
                PrfofilePhoto(image:image , weight: tilelen/3, height: tilelen/3,),
-               Text('~'+ useridname!,
-               style: TextStyle(
+               Text('~${useridname!}',
+               style: const TextStyle(
                  fontSize: 25
                ),),
                const SizedBox(height: 20,),
@@ -44,6 +45,7 @@ final DocumentReference documentrefrence;
                            oldnameid: useridname,
                            imageUrl:imageUrl,
                            userid: userid) ));
+
                  },
                  child: DecoratedBox(
                    decoration: BoxDecoration(
@@ -66,7 +68,7 @@ final DocumentReference documentrefrence;
                  ),
                )
              ],
-           )),
+           ),
 
             GestureDetector(
               onTap: (){

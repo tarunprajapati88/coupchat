@@ -64,7 +64,7 @@ class _ChatRoomState extends State<ChatRoom> {
           widget.Username,
           style: const TextStyle(),
         ),
-        backgroundColor: Colors.green[100],
+        backgroundColor: Colors.grey[300],
       ),
       body: Column(
         children: [
@@ -121,7 +121,7 @@ class _ChatRoomState extends State<ChatRoom> {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
-              color: isCurrentuser ? Colors.green[100] : Colors.white,
+              color: isCurrentuser ? Colors.grey[300] : Colors.white,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -137,9 +137,9 @@ class _ChatRoomState extends State<ChatRoom> {
                 Text(
                   formattedTime,
                   style: TextStyle(
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w400,
                     fontSize: 10,
-                    color: isCurrentuser ? (isMsgseen ? Colors.green: Colors.black87) : Colors.grey,
+                    color: isCurrentuser ? (isMsgseen ? Colors.brown: Colors.black87) : Colors.black,
                   ),
                 ),
               ],
@@ -161,19 +161,18 @@ class _ChatRoomState extends State<ChatRoom> {
                 obst: false,
                 controller: tosend,
               )),
-
           Padding(
             padding: const EdgeInsets.all(5.0),
               child: Container(
                 padding: const EdgeInsets.all(1),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.green[100],
+                  color: Colors.grey[300],
 
                 ),
 
                 child: IconButton(
-                    highlightColor: Colors.green,
+                    highlightColor: Colors.grey[400],
                     onPressed: sendMessage,
                     icon: const Icon(
                       Icons.send_sharp,
@@ -182,7 +181,6 @@ class _ChatRoomState extends State<ChatRoom> {
                     )),
               ),
             ),
-
         ],
       ),
     );
