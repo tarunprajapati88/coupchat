@@ -19,7 +19,7 @@ class Usertile extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
         child: Container(
-          height: tilelen/10,
+          height: tilelen/11,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
@@ -28,14 +28,14 @@ class Usertile extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 2, 5, 2),
-                child:PrfofilePhoto(image: image, height: tilelen/12, weight: tilelen/12,)
+                child:PrfofilePhoto(image: image, height: tilelen/14, weight: tilelen/14,)
                 ),
               const SizedBox(width:
                 20,),
               Text(text,
               style: const TextStyle(fontSize:
               18,
-              fontWeight: FontWeight.w400),
+              fontWeight: FontWeight.w500),
               )
             ],
           ),

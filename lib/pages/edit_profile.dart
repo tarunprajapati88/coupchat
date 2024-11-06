@@ -26,6 +26,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   File? _image;
   bool _isLoading = false;
+  bool _ischanged=false;
   late TextEditingController _controller;
   late TextEditingController _controlleruid;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -100,8 +101,8 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
-                    child: const LoginButton(
-                      name: 'Save',
+                    child:  LoginButton(
+                      name: 'Save', color: _ischanged? Colors.blueAccent:Colors.grey.shade400,
                     ),
                     onTap: () {
                       _saveProfile(widget.documentReference, widget.userid);
@@ -136,6 +137,7 @@ class _EditProfileState extends State<EditProfile> {
     if (pickedImage != null) {
       setState(() {
         _isLoading = true;
+        _ischanged=true;
       });
 
       final imageFile = File(pickedImage.path);

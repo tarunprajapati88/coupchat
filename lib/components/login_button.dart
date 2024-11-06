@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class LoginButton extends StatelessWidget {
    final String  name;
+   final Color color;
   const LoginButton({super.key,
-  required this.name,
+  required this.name, required this.color
   });
 
   @override
@@ -13,7 +14,7 @@ class LoginButton extends StatelessWidget {
       width: screenWidth,
       height: 50,
       decoration: BoxDecoration(
-          color: Colors.grey[400],
+          color:color ,
         borderRadius: const BorderRadius.all(Radius.circular(8)),
       ),
       child:  Center(child: Text( name,style: const TextStyle(

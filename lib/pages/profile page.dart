@@ -99,8 +99,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(height: 10,),
                   GestureDetector(
-                    child: const LoginButton(
-                      name: 'Done',
+                    child: LoginButton(
+                      name: 'Done', color: Colors.grey.shade400,
                     ),
                     onTap: (){
                       _saveProfile(widget.documerntReference,widget.userid);

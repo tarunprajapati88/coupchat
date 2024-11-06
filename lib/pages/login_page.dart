@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 7),
                     GestureDetector(
-                      child: const LoginButton(name: 'LOGIN'),
+                      child:  LoginButton(name: 'LOGIN', color: Colors.grey.shade400,),
                       onTap: () => login(context),
                     ),
                     const SizedBox(height: 7),

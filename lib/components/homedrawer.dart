@@ -22,7 +22,7 @@ final DocumentReference documentrefrence;
     final tilelen = MediaQuery.of(context).size.width;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(2),
       child: Padding(
         padding: const  EdgeInsets.fromLTRB(15, 60, 10, 20),
         child: Column(
@@ -36,7 +36,7 @@ final DocumentReference documentrefrence;
                style: const TextStyle(
                  fontSize: 25
                ),),
-               const SizedBox(height: 20,),
+               const SizedBox(height: 30,),
                GestureDetector(
                  onTap: (){
                    Navigator.push(context, MaterialPageRoute(builder: (context)=>
@@ -54,7 +54,7 @@ final DocumentReference documentrefrence;
                    ),
                    child: Container(
                      padding: const EdgeInsets.only(left: 10),
-                     height: 60,
+                     height: 50,
                      child: const
                      Row(
                        mainAxisAlignment: MainAxisAlignment.start,
@@ -85,7 +85,7 @@ final DocumentReference documentrefrence;
                 ),
                   child: Container(
                   padding: const EdgeInsets.only(left: 10),
-                  height: 60,
+                  height: 50,
                   child: const
                   Row(
                   mainAxisAlignment: MainAxisAlignment.start,

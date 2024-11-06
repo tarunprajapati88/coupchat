@@ -55,8 +55,8 @@ class _ChatRoomState extends State<ChatRoom> {
             const BackButton(),
             PrfofilePhoto(
               image: widget.image,
-              height: tilelen / 17,
-              weight: tilelen / 17,
+              height: tilelen / 18.5,
+              weight: tilelen / 18.5,
             ),
           ],
         ),
@@ -128,10 +128,10 @@ class _ChatRoomState extends State<ChatRoom> {
               children: [
                 Text(
                   data['message'],
-                  style: const TextStyle(
+                  style:  TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
-                    color: Colors.black,
+                    color: Colors.grey[800],
                   ),
                 ),
                 Text(
@@ -139,7 +139,7 @@ class _ChatRoomState extends State<ChatRoom> {
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 10,
-                    color: isCurrentuser ? (isMsgseen ? Colors.brown: Colors.black87) : Colors.black,
+                    color: isCurrentuser ? (isMsgseen ? Colors.brown: Colors.grey[600]) : Colors.grey[500],
                   ),
                 ),
               ],

@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
     index: currentPageIndex,
     children: <Widget>[
       userlist(),
-      Searchpage(),
+      SearchPage(),
     ],
   ),
     );

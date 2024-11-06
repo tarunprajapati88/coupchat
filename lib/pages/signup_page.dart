@@ -189,7 +189,7 @@ class _SignupPageState extends State<SignupPage> {
                     height: 13,
                   ),
             
-                  GestureDetector(child: const LoginButton(name: 'Sign Up', ),
+                  GestureDetector(child:  LoginButton(name: 'Sign Up', color: Colors.grey.shade400, ),
                   onTap: ()=>signup(context),
                   ),
                   const SizedBox(
