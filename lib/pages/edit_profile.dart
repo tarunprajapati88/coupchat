@@ -183,7 +183,9 @@ class _EditProfileState extends State<EditProfile> {
         await _firestore.collection('Users').doc(userid).update({
           'username': _controller.text,
           'imageurl': downloadUrl,
-          'uniqueUsername': _controlleruid.text
+          'uniqueUsername': _controlleruid.text,
+          'usernameLower': _controller.text.toLowerCase(),
+          'uniqueUsernameLower': _controlleruid.text.toLowerCase(),
         });
 
         Navigator.pushAndRemoveUntil(
@@ -204,7 +206,9 @@ class _EditProfileState extends State<EditProfile> {
       try {
         await _firestore.collection('Users').doc(userid).update({
           'username': _controller.text,
-          'uniqueUsername': _controlleruid.text
+          'uniqueUsername': _controlleruid.text,
+          'usernameLower': _controller.text.toLowerCase(),
+          'uniqueUsernameLower': _controlleruid.text.toLowerCase(),
         });
         Navigator.pushAndRemoveUntil(
           context,

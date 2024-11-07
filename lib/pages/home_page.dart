@@ -7,60 +7,64 @@ import '../components/homedrawer.dart';
 import '../components/user_tile.dart';
 import 'Searchpage.dart';
 import 'chat_room.dart';
+
 class HomePage extends StatefulWidget {
-   const HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-      final ChatService _chatservice =ChatService();
+  final ChatService _chatservice = ChatService();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-      final FirebaseAuth _auth=FirebaseAuth.instance;
-
-   int currentPageIndex = 0;
+  int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-
-    return  Scaffold(
+    return Scaffold(
       bottomNavigationBar: NavigationBar(
         backgroundColor: Colors.grey[200],
-        selectedIndex:currentPageIndex ,
+        selectedIndex: currentPageIndex,
         indicatorColor: Colors.grey[350],
         destinations: const <Widget>[
-        NavigationDestination(
-            selectedIcon: Icon(Icons.message),
-            icon: Icon(Icons.message_outlined), label: 'Chats'),
-        NavigationDestination(
-          icon: Icon(Icons.person_add_alt),
-            selectedIcon: Icon(Icons.person_add_alt_1), label: 'Add Users')
-      ],
+          NavigationDestination(
+              selectedIcon: Icon(Icons.message),
+              icon: Icon(Icons.message_outlined),
+              label: 'Chats'),
+          NavigationDestination(
+            icon: Icon(Icons.person_add_alt),
+            selectedIcon: Icon(Icons.person_add_alt_1),
+            label: 'Add Users',
+          ),
+        ],
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
           });
-        },),
+        },
+      ),
       backgroundColor: Colors.grey.shade100,
-      appBar:  AppBar(
+      appBar: AppBar(
         actions: [
-          Builder(
-              builder: (context) {
-                return IconButton(onPressed: (){
+          Builder(builder: (context) {
+            return IconButton(
+                onPressed: () {
                   Scaffold.of(context).openEndDrawer();
-                }, icon:const Icon(Icons.settings) );
-              }
-          )
+                },
+                icon: const Icon(Icons.settings));
+          })
         ],
-        title: const Text('CoupChat',
+        title: const Text(
+          'CoupChat',
           style: TextStyle(
               fontFamily: 'PlaywriteCU',
               fontWeight: FontWeight.w700,
               fontSize: 20,
-              color: Colors.black
-          ),),
-       backgroundColor: Colors.grey[300],
+              color: Colors.black),
+        ),
+        backgroundColor: Colors.grey[300],
       ),
       endDrawer: Drawer(
         backgroundColor: Colors.grey.shade200,
@@ -77,63 +81,94 @@ class _HomePageState extends State<HomePage> {
             final currentUserData = snapshot.data!.firstWhere(
                   (userData) => userData['email'] == _auth.currentUser!.email,
             );
-            DocumentReference documentReference2 =FirebaseFirestore.instance.collection('Users').doc(currentUserData['uid']);
+            DocumentReference documentReference2 = FirebaseFirestore.instance
+                .collection('Users')
+                .doc(currentUserData['uid']);
             return Homedrawer(
               image: ProfileImage(imageUrl: currentUserData['imageurl']),
               documentrefrence: documentReference2,
-              name:currentUserData['username'] ,
-              useridname:currentUserData['uniqueUsername'], imageUrl: currentUserData['imageurl'], userid: currentUserData['uid'],);
-                    },
+              name: currentUserData['username'],
+              useridname: currentUserData['uniqueUsername'],
+              imageUrl: currentUserData['imageurl'],
+              userid: currentUserData['uid'],
+            );
+          },
         ),
       ),
-  body: IndexedStack(
-    index: currentPageIndex,
-    children: <Widget>[
-      userlist(),
-      SearchPage(),
-    ],
-  ),
+      body: IndexedStack(
+        index: currentPageIndex,
+        children: <Widget>[
+          friendList(),
+          const SearchPage(),
+        ],
+      ),
     );
   }
 
-  Widget userlist(){
-    return StreamBuilder(
-        stream: _chatservice.getUsersStrean(),
-        builder: (context,snapshot){
-          if(snapshot.hasError){
-            return const Text('Error');
-          }
-          if(snapshot.connectionState==ConnectionState.waiting){
-            return const Text('Loading...');
-          }
+  Widget friendList() {
+    final String currentUserId = _auth.currentUser!.uid;
 
-          return ListView(
-            children: snapshot.data!.map<Widget>((userData) {
-              return _buildUserListitem(userData, context);
-            }).toList(),
-
-          );
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUserId)
+          .collection('myfriends')
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Error');
         }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+
+        final friendsDocs = snapshot.data!.docs;
+
+        // Fetch each friend's details based on document references
+        return ListView.builder(
+          itemCount: friendsDocs.length,
+          itemBuilder: (context, index) {
+            DocumentReference friendRef = friendsDocs[index]['friendRef'];
+
+            return FutureBuilder<DocumentSnapshot>(
+              future: friendRef.get(),
+              builder: (context, friendSnapshot) {
+                if (!friendSnapshot.hasData || friendSnapshot.hasError) {
+                     return const Padding(
+                       padding: EdgeInsets.only(left: 160,top: 300),
+                       child: Stack(
+                           children:[
+                             CircularProgressIndicator()
+                           ]
+                       ),
+                     );
+                }
+
+                final friendData = friendSnapshot.data!.data() as Map<String, dynamic>;
+
+                return Usertile(
+                  text: friendData['username'],
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatRoom(
+                          senderID: _auth.currentUser!.email!,
+                          reciverID: friendData['uid'],
+                          Username: friendData['username'],
+                          image: ProfileImage(imageUrl: friendData['imageurl']),
+                          uniqueUsername:  friendData['uniqueUsername']
+                        ),
+                      ),
+                    );
+                  },
+                  image: ProfileImage(imageUrl: friendData['imageurl']),
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
-
-  Widget _buildUserListitem(Map<String,dynamic>userData,BuildContext context ){
-
-      if(userData['email']!=_auth.currentUser!.email){
-        return
-          Usertile(text: userData['username'], onTap: () {
-          Navigator.push(context,MaterialPageRoute(
-               builder: (context)=>ChatRoom(
-                senderID: userData['email'],
-                reciverID: userData['uid'],
-                Username: userData['username'],
-                image:   ProfileImage(imageUrl: userData['imageurl']),
-
-              )) );
-        },  image:
-              ProfileImage(imageUrl: userData['imageurl']),
-    );
-  } else{
-        return Container();}
-      }
 }

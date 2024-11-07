@@ -187,7 +187,9 @@ class _ProfilePageState extends State<ProfilePage> {
           'email': email,
           'username':_controller.text,
           'imageurl':downloadUrl,
-          'uniqueUsername':_controlleruid.text
+          'uniqueUsername':_controlleruid.text,
+        'usernameLower': _controller.text.toLowerCase(),
+        'uniqueUsernameLower': _controlleruid.text.toLowerCase(),
         });
 
         Navigator.pushAndRemoveUntil(

@@ -14,9 +14,11 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _controller = TextEditingController();
   String? searchQuery;
-  final FirebaseAuth _auth=FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,19 +33,16 @@ class _SearchPageState extends State<SearchPage> {
                 controller: _controller,
                 onChanged: (value) {
                   setState(() {
-                    searchQuery = value.trim();
+                    searchQuery = value.trim().toLowerCase();
                   });
                 },
                 decoration: InputDecoration(
                   fillColor: Colors.white,
                   enabledBorder: const OutlineInputBorder(
-                    borderRadius:  BorderRadius.all(Radius.circular(8)),
-                    borderSide: BorderSide(
-                        color: Colors.grey,
-                        width: 2
-                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(color: Colors.grey, width: 2),
                   ),
-                  focusedBorder:OutlineInputBorder(
+                  focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey.shade400),
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                   ),
@@ -69,42 +68,50 @@ class _SearchPageState extends State<SearchPage> {
             Expanded(
               child: searchQuery == null || searchQuery!.isEmpty
                   ? const Center(child: Text('Enter text to search'))
-                  : StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('Users')
-                    .where('uniqueUsername', isGreaterThanOrEqualTo: searchQuery)
-                    .where('uniqueUsername', isLessThan: searchQuery! + '\uf8ff')
-                    .snapshots(),
+                  : FutureBuilder<List<DocumentSnapshot>>(
+                future: _searchUsers(searchQuery!),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator(
-                      color: Colors.grey,
-                    ));
+                    return const Center(
+                      child: CircularProgressIndicator(color: Colors.grey),
+                    );
                   }
 
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(child: Text('No users found.'));
                   }
-                  final userDocs = snapshot.data!.docs;
+
+                  final userDocs = snapshot.data!;
 
                   return ListView.builder(
                     itemCount: userDocs.length,
                     itemBuilder: (context, index) {
-                      final userData = userDocs[index];
+                      final userData = userDocs[index].data() as Map<String, dynamic>;
 
-                      if(userData['email']!=_auth.currentUser!.email){
-                      return SearchUserTile(text: userData['uniqueUsername'], image:
-                      ProfileImage(imageUrl: userData['imageurl']), onTap: () {
-                        Navigator.push(context,MaterialPageRoute(
-                            builder: (context)=>ChatRoom(
-                              senderID: userData['email'],
-                              reciverID: userData['uid'],
-                              Username: userData['username'],
-                              image:   ProfileImage(imageUrl: userData['imageurl']),
 
-                            )) );
-                      }, name: userData['username'],);}
-                      return null;
+                      if (userData['email'] != _auth.currentUser!.email) {
+                        return SearchUserTile(
+                          text: userData['uniqueUsername'],
+                          image: ProfileImage(imageUrl: userData['imageurl']),
+                          onTap: () {
+                            addFriend(_auth.currentUser!.uid, userData['uid']);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatRoom(
+                                  senderID: userData['email'],
+                                  reciverID: userData['uid'],
+                                  Username: userData['username'],
+                                  image: ProfileImage(imageUrl: userData['imageurl']), uniqueUsername:userData['uniqueUsername'] ,
+                                ),
+                              ),
+                            );
+                          },
+                          name: userData['username'],
+                          icon: const Icon(Icons.check),
+                        );
+                      }
+                      return const SizedBox();
                     },
                   );
                 },
@@ -114,5 +121,42 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
     );
+  }
+
+  Future<List<DocumentSnapshot>> _searchUsers(String query) async {
+
+    QuerySnapshot uniqueUsernameSnapshot = await _firestore
+        .collection('Users')
+        .where('uniqueUsernameLower', isGreaterThanOrEqualTo: query)
+        .where('uniqueUsernameLower', isLessThanOrEqualTo: query + '\uf8ff')
+        .get();
+
+
+    QuerySnapshot usernameSnapshot = await _firestore
+        .collection('Users')
+        .where('usernameLower', isGreaterThanOrEqualTo: query)
+        .where('usernameLower', isLessThanOrEqualTo: query + '\uf8ff')
+        .get();
+
+
+    final allDocs = uniqueUsernameSnapshot.docs + usernameSnapshot.docs;
+    final uniqueDocs = {for (var doc in allDocs) doc.id: doc}.values.toList();
+
+    return uniqueDocs;
+  }
+
+  Future<void> addFriend(String currentUserId, String friendUserId) async {
+    DocumentReference currentUserDoc = _firestore.collection('Users').doc(currentUserId);
+    DocumentReference friendDoc = _firestore.collection('Users').doc(friendUserId);
+
+    await currentUserDoc.collection('myfriends').doc(friendUserId).set({
+      'friendRef': friendDoc,
+      'addedAt': FieldValue.serverTimestamp(),
+    });
+
+    await friendDoc.collection('myfriends').doc(currentUserId).set({
+      'friendRef': currentUserDoc,
+      'addedAt': FieldValue.serverTimestamp(),
+    });
   }
 }

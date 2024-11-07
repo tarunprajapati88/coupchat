@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coupchat/chat/chat_service.dart';
+import 'package:coupchat/pages/seeUSERprofile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:coupchat/components/prfofile_photo.dart';
@@ -10,6 +11,7 @@ class ChatRoom extends StatefulWidget {
   final String senderID;
   final String reciverID;
   final String Username;
+  final String uniqueUsername;
   final Widget? image;
 
   const ChatRoom({
@@ -17,7 +19,7 @@ class ChatRoom extends StatefulWidget {
     required this.senderID,
     required this.reciverID,
     required this.Username,
-    this.image,
+    this.image, required this.uniqueUsername,
   });
 
   @override
@@ -60,9 +62,20 @@ class _ChatRoomState extends State<ChatRoom> {
             ),
           ],
         ),
-        title: Text(
-          widget.Username,
-          style: const TextStyle(),
+        title: GestureDetector(
+          onTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                Seeuserprofile(image: widget.image, username:widget.Username , uniquename: widget.uniqueUsername,)
+              ),
+            );
+          },
+          child: Text(
+            widget.Username,
+            style: const TextStyle(),
+          ),
         ),
         backgroundColor: Colors.grey[300],
       ),
