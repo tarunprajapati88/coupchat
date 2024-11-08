@@ -7,11 +7,13 @@ class Seeuserprofile extends StatelessWidget {
  final Widget? image;
   final String username;
   final String uniquename;
+  final Icon verfied;
 
  Seeuserprofile({super.key,
   required this.image,
    required this.username,
-   required this.uniquename
+   required this.uniquename,
+   required this.verfied
   });
 
   @override
@@ -21,13 +23,25 @@ class Seeuserprofile extends StatelessWidget {
       appBar: AppBar(title: const Text('User Profile'),backgroundColor: Colors.grey.shade300,),
       body: Column(
         children: [
-          SizedBox(height: 40,),
+          const SizedBox(height: 40,),
           Center(child: PrfofilePhoto(image: image, height: 220, weight: 220)),
           const SizedBox(height: 20,),
-          Text(username,style: const TextStyle(
-            fontSize: 25
-          ),),
-          Text("@"+uniquename),
+          Row( mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Text(username,style:
+                  const TextStyle(
+                    fontSize: 25
+                  ),),
+                  Text("@"+uniquename),
+                ],
+              ),
+              const SizedBox(width: 8,),
+              verfied
+            ],
+          ),
+
         ],
       ),
     );

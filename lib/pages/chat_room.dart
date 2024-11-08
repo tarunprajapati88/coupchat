@@ -13,6 +13,7 @@ class ChatRoom extends StatefulWidget {
   final String Username;
   final String uniqueUsername;
   final Widget? image;
+  final bool isverfies;
 
   const ChatRoom({
     super.key,
@@ -20,6 +21,7 @@ class ChatRoom extends StatefulWidget {
     required this.reciverID,
     required this.Username,
     this.image, required this.uniqueUsername,
+    required this.isverfies,
   });
 
   @override
@@ -68,13 +70,22 @@ class _ChatRoomState extends State<ChatRoom> {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                Seeuserprofile(image: widget.image, username:widget.Username , uniquename: widget.uniqueUsername,)
+                Seeuserprofile(image: widget.image,
+                  username:widget.Username ,
+                  uniquename: widget.uniqueUsername,
+                  verfied: Icon(widget.isverfies ? Icons.verified_rounded : null,
+                    color: Colors.greenAccent,),)
               ),
             );
           },
-          child: Text(
-            widget.Username,
-            style: const TextStyle(),
+          child: Row(
+            children: [
+              Text(
+                widget.Username,
+                style: const TextStyle(),
+              ),
+              Icon(widget.isverfies ? Icons.verified_rounded : null,color: Colors.greenAccent,)
+            ],
           ),
         ),
         backgroundColor: Colors.grey[300],

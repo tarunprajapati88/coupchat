@@ -6,14 +6,20 @@ class SearchUserTile extends StatelessWidget {
   final String name;
   final Widget? image;
   final Icon icon;
+  final Icon Verfiedicon;
   final void Function()? onTap;
+  final void Function()? onTapProfile;
 
-  const SearchUserTile({super.key,
+  const SearchUserTile({
+    super.key,
     required this.text,
     required this.onTap,
     required this.image,
     required this.name,
-    required this.icon
+    required this.icon,
+    required this.onTapProfile,
+    required this.Verfiedicon,
+
   });
 
   @override
@@ -22,41 +28,52 @@ class SearchUserTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
       child: Container(
-        height: tilelen/11,
+        height: tilelen / 11,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Row(
           children: [
-            Padding(
-                padding: const EdgeInsets.fromLTRB(10, 2, 5, 2),
-                child:PrfofilePhoto(image: image, height: tilelen/14, weight: tilelen/14,)
-            ),
-            const SizedBox(width:
-            20,),
-
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(text,
-                  style: const TextStyle(fontSize:
-                  18,
-                      fontWeight: FontWeight.w500),
+            Expanded(
+              child: InkWell(
+                onTap: onTapProfile,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 2, 5, 2),
+                      child: PrfofilePhoto(
+                        image: image,
+                        height: tilelen / 14,
+                        weight: tilelen / 14,
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          text,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(name),
+                      ],
+                    ),
+                    SizedBox(width: 8,),
+                    Verfiedicon
+                  ],
                 ),
-                Text(name)
-              ],
+              ),
             ),
-             Expanded(child: SizedBox(width: 5,)),
-             Padding(
-               padding:  EdgeInsets.fromLTRB(5, 5, 10, 5),
-               child: GestureDetector(
-                 onTap: onTap,
-                 child: icon,
-               ),
-             ),
-                       ],
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: icon,
+            ),
+          ],
         ),
       ),
     );

@@ -124,7 +124,28 @@ class _HomePageState extends State<HomePage> {
 
         final friendsDocs = snapshot.data!.docs;
 
-        // Fetch each friend's details based on document references
+        if (friendsDocs.isEmpty) {
+
+          return Center(
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  currentPageIndex = 1;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white, backgroundColor: Colors.grey,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16), // Padding
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18), // Rounded corners
+                ),
+                elevation: 5, // Shadow elevation
+              ),
+              child: const Text('Add friends'),
+            ),
+          );
+        }
+
         return ListView.builder(
           itemCount: friendsDocs.length,
           itemBuilder: (context, index) {
@@ -157,12 +178,15 @@ class _HomePageState extends State<HomePage> {
                           reciverID: friendData['uid'],
                           Username: friendData['username'],
                           image: ProfileImage(imageUrl: friendData['imageurl']),
-                          uniqueUsername:  friendData['uniqueUsername']
+                          uniqueUsername:  friendData['uniqueUsername'],
+                          isverfies: friendData['Isverified'],
                         ),
                       ),
                     );
                   },
                   image: ProfileImage(imageUrl: friendData['imageurl']),
+                  verfied:  Icon(friendData['Isverified'] ? Icons.verified_rounded : null,
+                    color: Colors.greenAccent,),
                 );
               },
             );

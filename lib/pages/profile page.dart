@@ -187,9 +187,10 @@ class _ProfilePageState extends State<ProfilePage> {
           'email': email,
           'username':_controller.text,
           'imageurl':downloadUrl,
+          'Isverified':false,
           'uniqueUsername':_controlleruid.text,
-        'usernameLower': _controller.text.toLowerCase(),
-        'uniqueUsernameLower': _controlleruid.text.toLowerCase(),
+          'usernameLower': _controller.text.toLowerCase(),
+          'uniqueUsernameLower': _controlleruid.text.toLowerCase(),
         });
 
         Navigator.pushAndRemoveUntil(
@@ -220,11 +221,12 @@ class _ProfilePageState extends State<ProfilePage> {
         String email =data?['email'];
 
      await  _firestore.collection('Users').doc(uid).set({
-          'uid': uid,
-          'email': email,
-          'username':_controller.text,
-          'imageurl':'https://firebasestorage.googleapis.com/v0/b/coupchat1.appspot.com/o/avatar.png.png?alt=media&token=7a21d7fa-c6f5-4ac3-b45a-aaeca09c1275',
-          'uniqueUsername':_controlleruid.text
+           'uid': uid,
+           'email': email,
+           'username':_controller.text,
+           'imageurl':'https://firebasestorage.googleapis.com/v0/b/coupchat1.appspot.com/o/avatar.png.png?alt=media&token=7a21d7fa-c6f5-4ac3-b45a-aaeca09c1275',
+           'uniqueUsername':_controlleruid.text,
+           'Isverified':false
         });
       Navigator.pushAndRemoveUntil(
         context,

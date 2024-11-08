@@ -1,3 +1,4 @@
+import 'package:coupchat/pages/seeUSERprofile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,6 +19,25 @@ class _SearchPageState extends State<SearchPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _controller = TextEditingController();
   String? searchQuery;
+  Set<String> myFriends = {};
+  @override
+  void initState() {
+    super.initState();
+    _loadMyFriends();
+  }
+
+  Future<void> _loadMyFriends() async {
+    final myFriendsSnapshot = await _firestore
+        .collection('Users')
+        .doc(_auth.currentUser!.uid)
+        .collection('myfriends')
+        .get();
+
+
+    setState(() {
+      myFriends = myFriendsSnapshot.docs.map((doc) => doc.id).toSet();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +50,7 @@ class _SearchPageState extends State<SearchPage> {
             SizedBox(
               height: 45,
               child: TextField(
+
                 controller: _controller,
                 onChanged: (value) {
                   setState(() {
@@ -87,14 +108,21 @@ class _SearchPageState extends State<SearchPage> {
                     itemCount: userDocs.length,
                     itemBuilder: (context, index) {
                       final userData = userDocs[index].data() as Map<String, dynamic>;
-
+                      final userId = userDocs[index].id;
 
                       if (userData['email'] != _auth.currentUser!.email) {
+                        bool isFriend = myFriends.contains(userId);
+
                         return SearchUserTile(
                           text: userData['uniqueUsername'],
                           image: ProfileImage(imageUrl: userData['imageurl']),
                           onTap: () {
-                            addFriend(_auth.currentUser!.uid, userData['uid']);
+                            if (!isFriend) {
+                              addFriend(_auth.currentUser!.uid, userData['uid']);
+                            }
+                            setState(() {
+                              myFriends.add(userId);
+                            });
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -102,13 +130,29 @@ class _SearchPageState extends State<SearchPage> {
                                   senderID: userData['email'],
                                   reciverID: userData['uid'],
                                   Username: userData['username'],
-                                  image: ProfileImage(imageUrl: userData['imageurl']), uniqueUsername:userData['uniqueUsername'] ,
+                                  image: ProfileImage(imageUrl: userData['imageurl']),
+                                  uniqueUsername: userData['uniqueUsername'], isverfies: userData['Isverified'],
                                 ),
                               ),
                             );
                           },
                           name: userData['username'],
-                          icon: const Icon(Icons.check),
+                          icon: Icon(isFriend ? Icons.check_circle : Icons.person_add_alt_1,color: Colors.blueAccent,),
+                          onTapProfile: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Seeuserprofile(
+                                    image:  ProfileImage(imageUrl: userData['imageurl']),
+                                    username: userData['username'],
+                                    uniquename: userData['uniqueUsername'],
+                                  verfied:  Icon(userData['Isverified'] ? Icons.verified_rounded : null,
+                                  color: Colors.greenAccent,),
+                                )
+                              ),
+                            );
+                          }, Verfiedicon: Icon(userData['Isverified'] ? Icons.verified_rounded : null,
+                          color: Colors.greenAccent,),
                         );
                       }
                       return const SizedBox();
@@ -131,13 +175,11 @@ class _SearchPageState extends State<SearchPage> {
         .where('uniqueUsernameLower', isLessThanOrEqualTo: query + '\uf8ff')
         .get();
 
-
     QuerySnapshot usernameSnapshot = await _firestore
         .collection('Users')
         .where('usernameLower', isGreaterThanOrEqualTo: query)
         .where('usernameLower', isLessThanOrEqualTo: query + '\uf8ff')
         .get();
-
 
     final allDocs = uniqueUsernameSnapshot.docs + usernameSnapshot.docs;
     final uniqueDocs = {for (var doc in allDocs) doc.id: doc}.values.toList();

@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class Usertile extends StatelessWidget {
   final String text;
  final Widget? image;
+ final Icon verfied;
   final void Function()? onTap;
   const Usertile({super.key,
   required this.text,
     required this.onTap,
-    required this.image
+    required this.image,
+    required this.verfied
   });
 
   @override
@@ -28,7 +30,9 @@ class Usertile extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 2, 5, 2),
-                child:PrfofilePhoto(image: image, height: tilelen/14, weight: tilelen/14,)
+                child:PrfofilePhoto(image: image,
+                  height: tilelen/14,
+                  weight: tilelen/14,)
                 ),
               const SizedBox(width:
                 20,),
@@ -36,7 +40,9 @@ class Usertile extends StatelessWidget {
               style: const TextStyle(fontSize:
               18,
               fontWeight: FontWeight.w500),
-              )
+              ),
+              const SizedBox(width: 3,),
+              verfied
             ],
           ),
         ),
