@@ -69,9 +69,13 @@ class SearchUserTile extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: icon,
+            GestureDetector(
+              onTap: onTap,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: icon,
+
+              ),
             ),
           ],
         ),
