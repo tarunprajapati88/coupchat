@@ -226,7 +226,9 @@ class _ProfilePageState extends State<ProfilePage> {
            'username':_controller.text,
            'imageurl':'https://firebasestorage.googleapis.com/v0/b/coupchat1.appspot.com/o/avatar.png.png?alt=media&token=7a21d7fa-c6f5-4ac3-b45a-aaeca09c1275',
            'uniqueUsername':_controlleruid.text,
-           'Isverified':false
+           'Isverified':false,
+          'usernameLower': _controller.text.toLowerCase(),
+          'uniqueUsernameLower': _controlleruid.text.toLowerCase(),
         });
       Navigator.pushAndRemoveUntil(
         context,
