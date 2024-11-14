@@ -40,8 +40,7 @@ class MyTextfield2 extends StatelessWidget {
           )
       ),
       obscureText: obst,
-      controller:controller ,
-
+      controller:controller,
     );
   }
 }

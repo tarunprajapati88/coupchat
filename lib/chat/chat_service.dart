@@ -1,10 +1,14 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coupchat/chat/message.dart';
+import 'package:coupchat/chat/voice_note.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
  final FirebaseAuth _auth=FirebaseAuth.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
   Stream<List<Map<String, dynamic>>> getUsersStrean() {
     return _firestore.collection('Users').snapshots().map((snapshot){
       return snapshot.docs.map((doc){
@@ -24,7 +28,9 @@ class ChatService {
      reciversID: reciverId,
      message: message,
      timestamp: timestamp,
-     seen: seen
+     seen: seen,
+     type: 'text',
+
  );
  List<String>ids =[currentUserId,reciverId];
  ids.sort();
@@ -36,6 +42,42 @@ class ChatService {
      .add(newMessage.tomap());
     return docRef;
 }
+  Future<DocumentReference>sendVoiceNote(String reciverId,url, bool seen)async{
+    final String currentUserId=_auth.currentUser!.uid;
+    final String currentUserEmail=_auth.currentUser!.email!;
+    final Timestamp timestamp=Timestamp.now();
+
+    Voice newMessage = Voice(
+      sender: currentUserId,
+      senderEmail: currentUserEmail,
+      reciversID: reciverId,
+      audiourl: url,
+      timestamp: timestamp,
+      seen: seen,
+      type: 'voicenote',
+
+    );
+    List<String>ids =[currentUserId,reciverId];
+    ids.sort();
+    String chatroomId =ids.join('_');
+    DocumentReference docRef= await _firestore
+        .collection('chat_rooms')
+        .doc(chatroomId)
+        .collection('message')
+        .add(newMessage.tomap());
+    return docRef;
+  }
+  Future<String> uploadVoiceNote(String filePath) async {
+    File file = File(filePath);
+    String fileName = 'voice_notes/${DateTime.now().millisecondsSinceEpoch}.m4a';
+    try {
+      TaskSnapshot uploadTask = await _storage.ref(fileName).putFile(file);
+      String downloadURL = await uploadTask.ref.getDownloadURL();
+      return downloadURL;
+    } catch (e) {
+      throw Exception("Error uploading voice note: $e");
+    }
+  }
 Stream<QuerySnapshot>getMessage(String userID,otheruserID){
   List<String>ids =[userID,otheruserID];
   ids.sort();
