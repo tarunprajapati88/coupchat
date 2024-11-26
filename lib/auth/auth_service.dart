@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
    final FirebaseAuth _auth = FirebaseAuth.instance;
    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
    String? username;
-       //for login
    Future<UserCredential> signInWithEmailPass(String email, password) async {
      try {
        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -17,7 +16,6 @@ import 'package:firebase_auth/firebase_auth.dart';
        throw Exception(e.code);
      }
    }
-   // for new account
    Future<UserCredential> register(String email, password,) async {
      try {
        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);

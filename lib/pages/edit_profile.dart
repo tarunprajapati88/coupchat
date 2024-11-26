@@ -149,8 +149,7 @@ class _EditProfileState extends State<EditProfile> {
           imageFile.path,
           targetPath,
           quality: 60,
-         // minWidth: 800,
-         // minHeight: 600,
+
         );
        final compressedImageFILE=File(compressedImage!.path);
         setState(() {

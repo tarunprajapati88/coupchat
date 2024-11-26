@@ -37,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-          backgroundColor: Colors.green.shade100,
+          backgroundColor: Colors.grey.shade200,
         title: const Text('Create Profile'),
       ),
       body: Stack(

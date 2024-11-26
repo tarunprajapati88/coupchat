@@ -1,15 +1,21 @@
+import 'dart:io';
+import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coupchat/chat/chat_service.dart';
 import 'package:coupchat/pages/seeUSERprofile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:coupchat/components/prfofile_photo.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:lottie/lottie.dart';
+import '../components/preview_image.dart';
 import '../components/voice_message.dart';
-
 
 class ChatRoom extends StatefulWidget {
   final String senderID;
@@ -40,9 +46,8 @@ class _ChatRoomState extends State<ChatRoom> {
   DocumentReference? messageReff;
   bool _isTextEmpty = true;
   bool _isRecording = false;
-  String? _audioFilePath;
-  FlutterSoundRecorder _recorder = FlutterSoundRecorder();
-
+  final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
+  bool  _isLoading=false;
 
 
   @override
@@ -213,6 +218,68 @@ class _ChatRoomState extends State<ChatRoom> {
         ),
       );
     }
+    if (data['type'] == 'image') {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
+        child: Column(
+          crossAxisAlignment:
+          isCurrentuser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ImagePreviewScreen(imageUrl: data['mediaurl']),
+                  ),
+                );
+              },
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: contwidth / 1.5,
+                  maxHeight: 300,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: isCurrentuser ? Colors.grey[300] : Colors.white,
+                ),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: data['mediaurl'],
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 8,
+                      right: 8,
+                      child: Text(
+                        formattedTime,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 10,
+                          color: Colors.grey[500],
+
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
       child: Column(
@@ -265,9 +332,40 @@ class _ChatRoomState extends State<ChatRoom> {
           _isRecording? const IconButton(onPressed: null, icon:Icon(Icons.fiber_manual_record,
           color: Colors.redAccent,
           ))
-              : const IconButton(
-              onPressed: null,
-              icon: Icon(Icons.add,color: Colors.black,)
+              : IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+
+
+              showMenu(
+                context: context,
+                position: const RelativeRect.fromLTRB(00, 550, 0, 0),
+                items: [
+                   PopupMenuItem(
+                    onTap: _pickImage,
+                    value: 'option1',
+                    child: const Row(children: [
+                      Icon(Icons.photo),
+                      Text('Media')
+                    ],)
+                  ),
+                  const PopupMenuItem(
+                    value: 'option2',
+                    child: Row(children: [
+                      Icon(Icons.file_copy),
+                      Text('Document')
+                    ],)
+                  ),
+                  const PopupMenuItem(
+                    value: 'option3',
+                    child: Row(children: [
+                      Icon(Icons.add_location),
+                      Text('Location')
+                    ],)
+                  ),
+                ],
+              );
+            },
           ),
           Expanded(
             child:    _isRecording?
@@ -361,6 +459,136 @@ class _ChatRoomState extends State<ChatRoom> {
       );
     }
   }
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final imageFile = File(pickedImage.path);
+      final directory = await getTemporaryDirectory();
+      final targetPath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      try {
+        final compressedImage = await FlutterImageCompress.compressAndGetFile(
+          imageFile.path,
+          targetPath,
+          quality: 60,
+        );
+        final compressedImageFile = File(compressedImage!.path);
+        setState(() {
+          _isLoading = false;
+        });
+
+        _showImagePreviewDialog(compressedImageFile);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error during compression: ${e.toString()}")),
+        );
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  void _showImagePreviewDialog(File imageFile) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.5),
+      builder: (context) => Stack(
+        children: [
+
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Container(
+              color: Colors.black.withOpacity(0.1),
+            ),
+          ),
+
+          Center(
+            child: AlertDialog(
+              backgroundColor: Colors.grey.shade200,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              title: const Text('Preview'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.8,
+                      maxHeight: MediaQuery.of(context).size.height * 0.5,
+                    ),
+                    child: Image.file(
+                      imageFile,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            await _sendImage(imageFile);
+                          },
+                          child: const Text(
+                            'Send',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Future<void> _sendImage(File imageFile) async {
+    String imageUrl = await _chatService.uploadImage(imageFile);
+    await _chatService.sendMedia(
+      widget.reciverID,
+      imageUrl,
+      false,
+    );
+  }
+
 
 
 }

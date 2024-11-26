@@ -85,7 +85,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pop(); // Dismiss the dialog
+                        Navigator.of(context).pop();
                       },
                     ),
                   ],

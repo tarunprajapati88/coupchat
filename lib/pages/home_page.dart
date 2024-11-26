@@ -30,9 +30,10 @@ class _HomePageState extends State<HomePage> {
         indicatorColor: Colors.grey[350],
         destinations: const <Widget>[
           NavigationDestination(
-              selectedIcon: Icon(Icons.message),
-              icon: Icon(Icons.message_outlined),
-              label: 'Chats'),
+            selectedIcon: Icon(Icons.message),
+            icon: Icon(Icons.message_outlined),
+            label: 'Chats',
+          ),
           NavigationDestination(
             icon: Icon(Icons.person_add_alt),
             selectedIcon: Icon(Icons.person_add_alt_1),
@@ -50,40 +51,44 @@ class _HomePageState extends State<HomePage> {
         actions: [
           Builder(builder: (context) {
             return IconButton(
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
-                },
-                icon: const Icon(Icons.settings));
-          })
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+              icon: const Icon(Icons.settings),
+            );
+          }),
         ],
         title: const Text(
           'CoupChat',
           style: TextStyle(
-              fontFamily: 'PlaywriteCU',
-              fontWeight: FontWeight.w700,
-              fontSize: 20,
-              color: Colors.black),
+            fontFamily: 'PlaywriteCU',
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
+            color: Colors.black,
+          ),
         ),
         backgroundColor: Colors.grey[300],
       ),
       endDrawer: Drawer(
         backgroundColor: Colors.grey.shade200,
-        child: StreamBuilder(
+        child: StreamBuilder<List<Map<String, dynamic>>>(
           stream: _chatservice.getUsersStrean(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return const Text('Error');
+              return const Center(child: Text('An error occurred.'));
             }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
             }
 
             final currentUserData = snapshot.data!.firstWhere(
                   (userData) => userData['email'] == _auth.currentUser!.email,
             );
-            DocumentReference documentReference2 = FirebaseFirestore.instance
+
+            final documentReference2 = FirebaseFirestore.instance
                 .collection('Users')
                 .doc(currentUserData['uid']);
+
             return Homedrawer(
               image: ProfileImage(imageUrl: currentUserData['imageurl']),
               documentrefrence: documentReference2,
@@ -116,16 +121,15 @@ class _HomePageState extends State<HomePage> {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return const Text('Error');
+          return const Center(child: Text('An error occurred.'));
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
 
         final friendsDocs = snapshot.data!.docs;
 
         if (friendsDocs.isEmpty) {
-
           return Center(
             child: ElevatedButton(
               onPressed: () {
@@ -134,65 +138,109 @@ class _HomePageState extends State<HomePage> {
                 });
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Colors.grey,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16), // Padding
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.grey,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18), // Rounded corners
+                  borderRadius: BorderRadius.circular(18),
                 ),
-                elevation: 5, // Shadow elevation
+                elevation: 5,
               ),
               child: const Text('Add friends'),
             ),
           );
         }
 
-        return ListView.builder(
-          itemCount: friendsDocs.length,
-          itemBuilder: (context, index) {
-            DocumentReference friendRef = friendsDocs[index]['friendRef'];
 
-            return FutureBuilder<DocumentSnapshot>(
-              future: friendRef.get(),
-              builder: (context, friendSnapshot) {
-                if (!friendSnapshot.hasData || friendSnapshot.hasError) {
-                     return const Padding(
-                       padding: EdgeInsets.only(left: 160,top: 300),
-                       child: Stack(
-                           children:[
-                             CircularProgressIndicator()
-                           ]
-                       ),
-                     );
-                }
+        return FutureBuilder<List<Map<String, dynamic>>>(
+          future: _fetchFriendDetails(friendsDocs),
+          builder: (context, friendDetailsSnapshot) {
+            if (friendDetailsSnapshot.hasError) {
+              return const Center(child: Text('An error occurred.'));
+            }
+            if (!friendDetailsSnapshot.hasData) {
+              return const Center(child: CircularProgressIndicator(color: Colors.blueAccent,backgroundColor: Colors.black,));
+            }
 
-                final friendData = friendSnapshot.data!.data() as Map<String, dynamic>;
+            final friendDetails = friendDetailsSnapshot.data!;
 
-                return Usertile(
-                  text: friendData['username'],
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatRoom(
-                          senderID: _auth.currentUser!.email!,
-                          reciverID: friendData['uid'],
-                          Username: friendData['username'],
-                          image: ProfileImage(imageUrl: friendData['imageurl']),
-                          uniqueUsername:  friendData['uniqueUsername'],
-                          isverfies: friendData['Isverified'],
-                        ),
-                      ),
+            return ListView.builder(
+              itemCount: friendDetails.length,
+              itemBuilder: (context, index) {
+                final friendData = friendDetails[index];
+
+                return StreamBuilder<QuerySnapshot>(
+                  stream: _chatservice.getMessage(currentUserId, friendData['uid']),
+                  builder: (context, messageSnapshot) {
+                    if (messageSnapshot.hasError) {
+                      return Usertile(
+                        text: friendData['username'],
+                        onTap: () => navigateToChatRoom(friendData),
+                        image: ProfileImage(imageUrl: friendData['imageurl']),
+                        verfied: buildVerifiedIcon(friendData),
+                        latestMsg: {},
+                      );
+                    }
+
+                    if (!messageSnapshot.hasData) {
+                      return const SizedBox.shrink();
+                    }
+
+                    final messages = messageSnapshot.data!.docs;
+                    final latestMessage = messages.isNotEmpty
+                        ? messages.last.data() as Map<String, dynamic>
+                        : {'message': 'No messages yet'};
+
+                    return Usertile(
+                      text: friendData['username'],
+                      onTap: () => navigateToChatRoom(friendData),
+                      image: ProfileImage(imageUrl: friendData['imageurl']),
+                      verfied: buildVerifiedIcon(friendData),
+                      latestMsg: latestMessage,
                     );
                   },
-                  image: ProfileImage(imageUrl: friendData['imageurl']),
-                  verfied:  Icon(friendData['Isverified'] ? Icons.verified_rounded : null,
-                    color: Colors.greenAccent,),
                 );
               },
             );
           },
         );
       },
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchFriendDetails(
+      List<QueryDocumentSnapshot> friendsDocs) async {
+    final List<Map<String, dynamic>> friendDetails = [];
+    for (final doc in friendsDocs) {
+      final friendRef = doc['friendRef'] as DocumentReference;
+      final friendSnapshot = await friendRef.get();
+      if (friendSnapshot.exists) {
+        friendDetails.add(friendSnapshot.data() as Map<String, dynamic>);
+      }
+    }
+    return friendDetails;
+  }
+
+  void navigateToChatRoom(Map<String, dynamic> friendData) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatRoom(
+          senderID: _auth.currentUser!.email!,
+          reciverID: friendData['uid'],
+          Username: friendData['username'],
+          image: ProfileImage(imageUrl: friendData['imageurl']),
+          uniqueUsername: friendData['uniqueUsername'],
+          isverfies: friendData['Isverified'],
+        ),
+      ),
+    );
+  }
+
+  Icon buildVerifiedIcon(Map<String, dynamic> friendData) {
+    return Icon(
+      friendData['Isverified'] ? Icons.verified_rounded : null,
+      color: Colors.blue,
     );
   }
 }
