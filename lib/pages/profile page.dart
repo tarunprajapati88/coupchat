@@ -1,21 +1,24 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../components/login_button.dart';
 import '../components/textfield.dart';
 import 'home_page.dart';
 
-
 class ProfilePage extends StatefulWidget {
- final dynamic userid;
-final  dynamic documerntReference;
-  const ProfilePage({super.key,
-  required this.documerntReference,
-    this.userid
+final dynamic userid;
+  final dynamic documerntReference;
+
+  const ProfilePage({
+    super.key,
+    required this.documerntReference,
+    this.userid,
   });
 
   @override
@@ -27,46 +30,70 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _isLoading = false;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
-  final TextEditingController _controller =TextEditingController();
-  final TextEditingController _controlleruid =TextEditingController();
+  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controlleruid = TextEditingController();
+  final FocusNode _focusNode1 = FocusNode();
+  final FocusNode _focusNode2 = FocusNode();
+  String? _fcmToken;
 
-  final FocusNode _focusNode1=FocusNode();
-  final FocusNode _focusNode2=FocusNode();
+  @override
+  void initState() {
+    super.initState();
+    _requestNotificationsPermission();
+  }
+
+  Future<void> _requestNotificationsPermission() async {
+    PermissionStatus status = await Permission.notification.request();
+      await Permission.microphone.request();
+    if (status.isGranted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Notification permission Granted")),
+      );
+      //fcm token
+      String? token = await FirebaseMessaging.instance.getToken();
+      _fcmToken=token;
+
+    } else if (status.isDenied) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Notification permission denied. You may miss important updates.")),
+      );
+    } else if (status.isPermanentlyDenied) {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Notifications are permanently denied. Please enable them in the app settings.")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-          backgroundColor: Colors.grey.shade200,
+        backgroundColor: Colors.grey.shade200,
         title: const Text('Create Profile'),
       ),
       body: Stack(
-        children:[ SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
               child: Column(
-
                 children: [
-                  const SizedBox(
-                    height: 40,
-                  ),
+                  const SizedBox(height: 40),
                   GestureDetector(
                     onTap: _pickImage,
-                    child:Stack(
+                    child: Stack(
                       children: [
                         CircleAvatar(
                           radius: 60,
                           backgroundImage: _image != null
                               ? FileImage(_image!)
                               : const AssetImage('assets/avatar.png.png') as ImageProvider,
-
                         ),
                         Positioned(
                           top: 90,
                           left: 90,
-                          right: 0,
-                          bottom: 0,
                           child: ClipOval(
                             child: Container(
                               color: Colors.black,
@@ -79,40 +106,41 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ),
-                  const SizedBox(height: 50,),
+                  const SizedBox(height: 50),
                   MyTextfield(
-                      icon: const Icon(Icons.person),
-                      name: 'Name',
-                      obst: false,
-                      controller: _controller,
-                   focusNode: _focusNode1, focusNode2: _focusNode2,
+                    icon: const Icon(Icons.person),
+                    name: 'Name',
+                    obst: false,
+                    controller: _controller,
+                    focusNode: _focusNode1,
+                    focusNode2: _focusNode2,
                   ),
-                  const SizedBox(height: 10,),
+                  const SizedBox(height: 10),
                   MyTextfield(
                     icon: const Icon(Icons.account_circle_outlined),
-                    name: 'Create Unique username',
+                    name: 'Create Unique Username',
                     obst: false,
                     controller: _controlleruid,
-                    focusNode: _focusNode2, focusNode2: null,
+                    focusNode: _focusNode2,
+                    focusNode2: null,
                   ),
-                  const SizedBox(height: 10,),
+                  const SizedBox(height: 10),
                   GestureDetector(
                     child: LoginButton(
-                      name: 'Done', color: Colors.grey.shade400,
+                      name: 'Done',
+                      color: Colors.grey.shade400,
                     ),
-                    onTap: (){
-                      _saveProfile(widget.documerntReference,widget.userid);
-                      },
+                    onTap: () {
+                      _saveProfile(widget.documerntReference, widget.userid);
+                    },
                   ),
-                  const SizedBox(height: 10,),
-
+                  const SizedBox(height: 10),
                 ],
               ),
             ),
           ),
-        ),
           if (_isLoading)
             IgnorePointer(
               ignoring: !_isLoading,
@@ -126,8 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-      ]
-
+        ],
       ),
     );
   }
@@ -150,12 +177,10 @@ class _ProfilePageState extends State<ProfilePage> {
           imageFile.path,
           targetPath,
           quality: 60,
-        //  minWidth: 800,
-        //  minHeight: 600,
         );
-        final compressedImageFILE=File(compressedImage!.path);
+        final compressedImageFile = File(compressedImage!.path);
         setState(() {
-          _image = compressedImageFILE ;
+          _image = compressedImageFile;
           _isLoading = false;
         });
       } catch (e) {
@@ -168,83 +193,61 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     }
   }
-  Future<void> _saveProfile(DocumentReference documerntReference,String userid) async {
+
+  Future<void> _saveProfile(DocumentReference documentReference, String userid) async {
     setState(() {
       _isLoading = true;
     });
-    if (_image != null) {
-      try {
+
+    String imageUrl;
+
+    try {
+      if (_image != null) {
+
         Reference storageRef = _storage.ref().child('profile_images/$userid.jpg');
         UploadTask uploadTask = storageRef.putFile(_image!);
         TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
-        String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-            DocumentSnapshot documentSnapshot=await documerntReference.get();
-            Map<String,dynamic>? data =documentSnapshot.data() as  Map<String,dynamic>?;
-            String uid =data?['uid'];
-        String email =data?['email'];
-      await  _firestore.collection('Users').doc(uid).set({
-          'uid': uid,
-          'email': email,
-          'username':_controller.text,
-          'imageurl':downloadUrl,
-          'Isverified':false,
-          'uniqueUsername':_controlleruid.text,
-          'usernameLower': _controller.text.toLowerCase(),
-          'uniqueUsernameLower': _controlleruid.text.toLowerCase(),
-        });
-
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-              (Route<dynamic> route) => false,
-        );
-      } catch (e) {
-           AlertDialog(title: Text(e.toString()),);
+        imageUrl = await taskSnapshot.ref.getDownloadURL();
+      } else {
+        imageUrl = 'https://firebasestorage.googleapis.com/v0/b/coupchat1.appspot.com/o/avatar.png.png?alt=media&token=7a21d7fa-c6f5-4ac3-b45a-aaeca09c1275';
       }
-      finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+
+      DocumentSnapshot documentSnapshot = await documentReference.get();
+      Map<String, dynamic>? data = documentSnapshot.data() as Map<String, dynamic>?;
+      String uid = data?['uid'];
+      String email = data?['email'];
 
 
-    else {
-      setState(() {
-        _isLoading = true;
+      await _firestore.collection('Users').doc(uid).set({
+        'uid': uid,
+        'email': email,
+        'username': _controller.text,
+        'imageurl': imageUrl,
+        'Isverified': false,
+        'uniqueUsername': _controlleruid.text,
+        'usernameLower': _controller.text.toLowerCase(),
+        'uniqueUsernameLower': _controlleruid.text.toLowerCase(),
+        'fcmtoken': _fcmToken ?? "",
       });
-      try{
-        DocumentSnapshot documentSnapshot=await documerntReference.get();
 
-        Map<String,dynamic>? data =documentSnapshot.data() as  Map<String,dynamic>?;
-        String uid =data?['uid'];
-        String email =data?['email'];
-
-     await  _firestore.collection('Users').doc(uid).set({
-           'uid': uid,
-           'email': email,
-           'username':_controller.text,
-           'imageurl':'https://firebasestorage.googleapis.com/v0/b/coupchat1.appspot.com/o/avatar.png.png?alt=media&token=7a21d7fa-c6f5-4ac3-b45a-aaeca09c1275',
-           'uniqueUsername':_controlleruid.text,
-           'Isverified':false,
-          'usernameLower': _controller.text.toLowerCase(),
-          'uniqueUsernameLower': _controlleruid.text.toLowerCase(),
-        });
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
             (Route<dynamic> route) => false,
       );
-    } catch(e){
-         AlertDialog(title: Text(e.toString()),);
-      }
-      finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+    } catch (e) {
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(e.toString()),
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
+
 }
-
-

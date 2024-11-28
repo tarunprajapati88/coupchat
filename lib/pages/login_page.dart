@@ -1,3 +1,4 @@
+import 'package:coupchat/pages/fcmToken.dart';
 import 'package:flutter/material.dart';
 import '../auth/auth_service.dart';
 import '../components/login_button.dart';
@@ -28,10 +29,10 @@ class _LoginPageState extends State<LoginPage> {
       await authService.signInWithEmailPass(_emailController.text, _passwordController.text);
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) =>  HomePage()),
+        MaterialPageRoute(builder: (context) =>  const HomePage()),
             (Route<dynamic> route) => false,
       );
-
+        FCM.updateFcmTokenInFirestore(true);
     } catch (e) {
       showDialog(
         context: context,

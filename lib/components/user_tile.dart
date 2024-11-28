@@ -95,13 +95,13 @@ class Usertile extends StatelessWidget {
                         ),
                         if(latestMsg['type']=='voicenote') const Row(
                           children: [
-                            Icon(Icons.mic_none_sharp,color: Colors.blue,),
+                            Icon(Icons.mic_none_sharp,color: Colors.grey,),
                             Text('Voicenote'),
                           ],
                         ),
                         if(latestMsg['type']=='image')  const Row(
                           children: [
-                            Icon(Icons.image,color: Colors.blue,),
+                            Icon(Icons.image,color: Colors.grey,),
                             Text('Image'),
                           ],
                         ),
@@ -120,19 +120,20 @@ class Usertile extends StatelessWidget {
                         latestMsg['type']=='voicenote'?
                           const Row(
                            children: [
-                        Icon(Icons.mic_none_sharp,color: Colors.blue,),
+                        Icon(Icons.mic_none_sharp,color: Colors.grey,),
                        Text('Voicenote'),
                        ],
                         ):
                         const Row(
                                children: [
-                                Icon(Icons.image,color: Colors.blue,),
+                                Icon(Icons.image,color: Colors.grey,),
                          Text('Image'),
                               ],
                             )
 
                         :
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Icon(
                           Icons.fiber_new_rounded,color: Colors.blue,
@@ -148,14 +149,15 @@ class Usertile extends StatelessWidget {
                           ),
                         ),
                         if(latestMsg['type']=='voicenote') const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Icon(Icons.mic_none_sharp,color: Colors.blue,),
+                            Icon(Icons.mic_none_sharp,color: Colors.grey,),
                             Text('Voicenote'),
                           ],
                         ),
                         if(latestMsg['type']=='image')  const Row(
                           children: [
-                            Icon(Icons.image,color: Colors.blue),
+                            Icon(Icons.image,color: Colors.grey),
                             Text('Image'),
                           ],
                         ),
@@ -165,7 +167,7 @@ class Usertile extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(formattedTime,style: const TextStyle(color: Colors.grey)),
+              Text(formattedTime,style: const TextStyle(color: Colors.grey,fontSize: 10)),
               const SizedBox(width: 5),
             ],
           ),

@@ -3,7 +3,9 @@ import 'package:coupchat/components/prfofile_photo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../pages/edit_profile.dart';
+import '../pages/fcmToken.dart';
 import '../pages/login_page.dart';
+
 
 class Homedrawer extends StatelessWidget {
 final Widget? image;
@@ -12,9 +14,15 @@ final String? useridname;
 final String? imageUrl;
 final dynamic userid;
 final DocumentReference documentrefrence;
+final bool ISuserVerified;
   const Homedrawer({super.key,
      required this.image,
-    required this.documentrefrence,required this.name,required this.useridname, required this.imageUrl, required this.userid
+    required this.documentrefrence,
+    required this.name,
+    required this.useridname,
+    required this.imageUrl,
+    required this.userid,
+    required this.ISuserVerified
   });
 
   @override
@@ -32,10 +40,16 @@ final DocumentReference documentrefrence;
              mainAxisAlignment: MainAxisAlignment.center,
              children: [
                PrfofilePhoto(image:image , weight: tilelen/3, height: tilelen/3,),
-               Text('~${useridname!}',
-               style: const TextStyle(
-                 fontSize: 25
-               ),),
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                   Text('~${useridname!}',
+                   style: const TextStyle(
+                     fontSize: 25
+                   ),),
+                   Icon(ISuserVerified?Icons.verified_rounded:null)
+                 ],
+               ),
                const SizedBox(height: 30,),
                GestureDetector(
                  onTap: (){
@@ -71,8 +85,9 @@ final DocumentReference documentrefrence;
            ),
 
             GestureDetector(
-              onTap: (){
-                FirebaseAuth.instance.signOut();
+              onTap: ()  async {
+             await   FCM.updateFcmTokenInFirestore(false);
+             await   FirebaseAuth.instance.signOut();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginPage()),

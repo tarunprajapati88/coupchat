@@ -96,6 +96,8 @@ class _HomePageState extends State<HomePage> {
               useridname: currentUserData['uniqueUsername'],
               imageUrl: currentUserData['imageurl'],
               userid: currentUserData['uid'],
+              ISuserVerified: currentUserData['Isverified'],
+
             );
           },
         ),

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../components/prfofile_photo.dart';
 
 class Seeuserprofile extends StatelessWidget {
@@ -9,7 +7,7 @@ class Seeuserprofile extends StatelessWidget {
   final String uniquename;
   final Icon verfied;
 
- Seeuserprofile({super.key,
+ const Seeuserprofile({super.key,
   required this.image,
    required this.username,
    required this.uniquename,
@@ -26,7 +24,8 @@ class Seeuserprofile extends StatelessWidget {
           const SizedBox(height: 40,),
           Center(child: PrfofilePhoto(image: image, height: 220, weight: 220)),
           const SizedBox(height: 20,),
-          Row( mainAxisAlignment: MainAxisAlignment.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 children: [
