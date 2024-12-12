@@ -27,12 +27,13 @@ class _LoginPageState extends State<LoginPage> {
     final authService = AuthService();
     try {
       await authService.signInWithEmailPass(_emailController.text, _passwordController.text);
+      await FCM.updateFcmTokenInFirestore(true);
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) =>  const HomePage()),
             (Route<dynamic> route) => false,
       );
-        FCM.updateFcmTokenInFirestore(true);
+
     } catch (e) {
       showDialog(
         context: context,

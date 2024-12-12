@@ -39,9 +39,32 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    _initializeFCM();
+    requestPermission();
     _requestNotificationsPermission();
-  }
 
+  }
+  void requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
   Future<void> _requestNotificationsPermission() async {
     PermissionStatus status = await Permission.notification.request();
       await Permission.microphone.request();
@@ -64,7 +87,14 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
   }
-
+  Future<void> _initializeFCM() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    String? token = await messaging.getToken();
+    setState(() {
+      _fcmToken = token;
+    });
+    print('FCM Token: $_fcmToken');
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

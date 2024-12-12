@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coupchat/chat/media_file.dart';
 import 'package:coupchat/chat/message.dart';
+import 'package:coupchat/chat/pushnotification.dart';
 import 'package:coupchat/chat/voice_note.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -21,11 +22,12 @@ class ChatService {
 
 
 
-  Future<DocumentReference>sendMessage(String reciverId,message, bool seen)async{
+  Future<DocumentReference>sendMessage(String reciverId,message, bool seen,String targetToken,String name)async{
+
     final String currentUserId=_auth.currentUser!.uid;
     final String currentUserEmail=_auth.currentUser!.email!;
     final Timestamp timestamp=Timestamp.now();
-
+    PushNotificationService.sendPushNotification(targetToken: targetToken, title: name, body: message);
  Message newMessage = Message(
      sender: currentUserId,
      senderEmail: currentUserEmail,
@@ -45,15 +47,16 @@ class ChatService {
      .collection('message')
      .add(newMessage.tomap());
     return docRef;
+
 }
 
 
 
-  Future<DocumentReference>sendVoiceNote(String reciverId,url, bool seen)async{
+  Future<DocumentReference>sendVoiceNote(String reciverId,url, bool seen,String targetToken,name)async{
     final String currentUserId=_auth.currentUser!.uid;
     final String currentUserEmail=_auth.currentUser!.email!;
     final Timestamp timestamp=Timestamp.now();
-
+    PushNotificationService.sendPushNotification(targetToken: targetToken, title: name, body: 'Sent a voicenote');
     Voice newMessage = Voice(
       sender: currentUserId,
       senderEmail: currentUserEmail,
@@ -113,11 +116,11 @@ class ChatService {
 
 
 
-  Future<DocumentReference>sendMedia(String reciverId,url, bool seen)async{
+  Future<DocumentReference>sendMedia(String reciverId,url, bool seen,String targetToken,name)async{
     final String currentUserId=_auth.currentUser!.uid;
     final String currentUserEmail=_auth.currentUser!.email!;
     final Timestamp timestamp=Timestamp.now();
-
+    PushNotificationService.sendPushNotification(targetToken: targetToken, title: name, body: 'Sent a image');
     MediaFile newMessage = MediaFile(
       sender: currentUserId,
       senderEmail: currentUserEmail,

@@ -24,7 +24,8 @@ class ChatRoom extends StatefulWidget {
   final String uniqueUsername;
   final Widget? image;
   final bool isverfies;
-
+  final String token;
+  final String currentUserName;
   const ChatRoom({
     super.key,
     required this.senderID,
@@ -33,6 +34,9 @@ class ChatRoom extends StatefulWidget {
     this.image,
     required this.uniqueUsername,
     required this.isverfies,
+    required this.token,
+    required this.currentUserName,
+
   });
 
   @override
@@ -47,14 +51,15 @@ class _ChatRoomState extends State<ChatRoom> {
   bool _isTextEmpty = true;
   bool _isRecording = false;
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
-  bool  _isLoading=false;
-
+  bool _isLoading=false;
 
   @override
   void initState() {
     super.initState();
+
     tosend.addListener(() {
       setState(() {
+
         _isTextEmpty = tosend.text.isEmpty;
       });
     });
@@ -68,9 +73,10 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   void sendMessage() async {
+
     if (tosend.text.isNotEmpty) {
       DocumentReference messageRef =
-      await _chatService.sendMessage(widget.reciverID, tosend.text, false,);
+      await _chatService.sendMessage(widget.reciverID, tosend.text, false,widget.token,widget.currentUserName);
       tosend.clear();
       setState(() {
         messageReff = messageRef;
@@ -456,6 +462,8 @@ class _ChatRoomState extends State<ChatRoom> {
         widget.reciverID,
         audioUrl,
         false,
+        widget.token,
+          widget.currentUserName
       );
     }
   }
@@ -586,9 +594,8 @@ class _ChatRoomState extends State<ChatRoom> {
       widget.reciverID,
       imageUrl,
       false,
+        widget.token
+        ,widget.currentUserName
     );
   }
-
-
-
 }

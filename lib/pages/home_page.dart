@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
 
   int currentPageIndex = 0;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,7 +107,7 @@ class _HomePageState extends State<HomePage> {
         index: currentPageIndex,
         children: <Widget>[
           friendList(),
-          const SearchPage(),
+         SearchPage(),
         ],
       ),
     );
@@ -177,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                     if (messageSnapshot.hasError) {
                       return Usertile(
                         text: friendData['username'],
-                        onTap: () => navigateToChatRoom(friendData),
+                        onTap: () async => navigateToChatRoom(friendData,await fetchCurrentUsername()),
                         image: ProfileImage(imageUrl: friendData['imageurl']),
                         verfied: buildVerifiedIcon(friendData),
                         latestMsg: {},
@@ -191,11 +192,16 @@ class _HomePageState extends State<HomePage> {
                     final messages = messageSnapshot.data!.docs;
                     final latestMessage = messages.isNotEmpty
                         ? messages.last.data() as Map<String, dynamic>
-                        : {'message': 'No messages yet'};
+                        : {'message': 'No messages yet',
+                      "reciversID": "",
+                      'seen':"null",
+                       'type':"",
+                      "timestamp":""
+                    };
 
                     return Usertile(
                       text: friendData['username'],
-                      onTap: () => navigateToChatRoom(friendData),
+                      onTap: () async => navigateToChatRoom(friendData,await fetchCurrentUsername()),
                       image: ProfileImage(imageUrl: friendData['imageurl']),
                       verfied: buildVerifiedIcon(friendData),
                       latestMsg: latestMessage,
@@ -223,26 +229,44 @@ class _HomePageState extends State<HomePage> {
     return friendDetails;
   }
 
-  void navigateToChatRoom(Map<String, dynamic> friendData) {
+  void navigateToChatRoom(Map<String, dynamic> friendData ,String name) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ChatRoom(
+          token:friendData['fcmtoken'],
           senderID: _auth.currentUser!.email!,
           reciverID: friendData['uid'],
           Username: friendData['username'],
           image: ProfileImage(imageUrl: friendData['imageurl']),
           uniqueUsername: friendData['uniqueUsername'],
-          isverfies: friendData['Isverified'],
+          isverfies: friendData['Isverified'], currentUserName: '',
         ),
       ),
     );
   }
 
   Icon buildVerifiedIcon(Map<String, dynamic> friendData) {
-    return Icon(
+    return Icon(size: 15,
       friendData['Isverified'] ? Icons.verified_rounded : null,
       color: Colors.blue,
     );
   }
+  Future<String> fetchCurrentUsername() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      throw Exception("No user logged in.");
+    }
+
+    final userDoc = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(currentUser.uid)
+        .get();
+
+    if (!userDoc.exists) {
+      throw Exception("User data not found.");
+    }
+    return userDoc.data()!['username']??"" ;
+  }
+
 }

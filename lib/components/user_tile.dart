@@ -23,11 +23,12 @@ class Usertile extends StatelessWidget {
   Widget build(BuildContext context) {
     final tilelen = MediaQuery.of(context).size.height;
     final FirebaseAuth _auth = FirebaseAuth.instance;
-    DateTime dateTime =latestMsg['timestamp'].toDate();
-    String formattedTime = DateFormat('hh:mm a').format(dateTime);
 
-    bool isCurrentUser = _auth.currentUser?.uid != latestMsg['reciversID'];
+    if(latestMsg['seen']!="null"){
+      DateTime dateTime =latestMsg['timestamp'].toDate();
+      String formattedTime = DateFormat('hh:mm a').format(dateTime);
 
+      bool isCurrentUser = _auth.currentUser?.uid != latestMsg['reciversID'];
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -78,11 +79,11 @@ class Usertile extends StatelessWidget {
                     isCurrentUser?
                     Row(
                       children: [
-                        Icon(
-                          Icons.done_all,
+                        Icon(size: 18,
+                          Icons.done_all_rounded,
                           color: latestMsg['seen'] == true
                               ? Colors.blueAccent
-                              : Colors.black,
+                              : Colors.grey,
                         ),
                         const SizedBox(width: 5),
                            if(latestMsg['type']=='text') Expanded(
@@ -167,12 +168,78 @@ class Usertile extends StatelessWidget {
                   ],
                 ),
               ),
+
               Text(formattedTime,style: const TextStyle(color: Colors.grey,fontSize: 10)),
               const SizedBox(width: 5),
             ],
           ),
         ),
       ),
+    );}
+    else{
+    return  GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
+        child: Container(
+          height: tilelen / 11,
+          decoration: BoxDecoration(
+            color: Colors.blue[50],
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 2, 5, 2),
+                child: PrfofilePhoto(
+                  image: image,
+                  height: tilelen / 14,
+                  weight: tilelen / 14,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    text,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),verfied,
+                                ],
+                              ),
+                              Text('Say Hii to your new fiend!!!',style: TextStyle(color: Colors.blueAccent),)
+                            ],
+                          ),
+                        ),
+                        
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ),
     );
+    }
   }
 }

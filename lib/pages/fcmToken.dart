@@ -13,9 +13,11 @@ class FCM{
       String? token;
       if(add){
       token = await FirebaseMessaging.instance.getToken();
+      print('FCM TOKEN GENERATED');
       }
       else{
         token="";
+        print('FCM TOKEN REMOVED');
       }
       await _firestore.collection('Users').doc(uid).update({
         'fcmtoken':token ,

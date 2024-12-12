@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coupchat/pages/seeUSERprofile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../components/chached_image.dart';
 import '../components/searchuserTile.dart';
@@ -20,6 +21,7 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _controller = TextEditingController();
   String? searchQuery;
   Set<String> myFriends = {};
+
   @override
   void initState() {
     super.initState();
@@ -33,10 +35,45 @@ class _SearchPageState extends State<SearchPage> {
         .collection('myfriends')
         .get();
 
-
     setState(() {
       myFriends = myFriendsSnapshot.docs.map((doc) => doc.id).toSet();
     });
+  }
+
+  Future<String> fetchCurrentUsername() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      throw Exception("No user logged in.");
+    }
+
+    final userDoc = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(currentUser.uid)
+        .get();
+
+    if (!userDoc.exists) {
+      throw Exception("User data not found.");
+    }
+
+    return userDoc.data()!['username'] ?? "";
+  }
+
+  void navigateToChatRoom(Map<String, dynamic> userData, String currentUserName) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatRoom(
+          token: userData['fcmtoken'],
+          senderID: _auth.currentUser!.email!,
+          reciverID: userData['uid'],
+          Username: userData['username'],
+          image: ProfileImage(imageUrl: userData['imageurl']),
+          uniqueUsername: userData['uniqueUsername'],
+          isverfies: userData['Isverified'],
+          currentUserName: currentUserName,
+        ),
+      ),
+    );
   }
 
   @override
@@ -50,7 +87,6 @@ class _SearchPageState extends State<SearchPage> {
             SizedBox(
               height: 45,
               child: TextField(
-
                 controller: _controller,
                 onChanged: (value) {
                   setState(() {
@@ -107,7 +143,8 @@ class _SearchPageState extends State<SearchPage> {
                   return ListView.builder(
                     itemCount: userDocs.length,
                     itemBuilder: (context, index) {
-                      final userData = userDocs[index].data() as Map<String, dynamic>;
+                      final userData =
+                      userDocs[index].data() as Map<String, dynamic>;
                       final userId = userDocs[index].id;
 
                       if (userData['email'] != _auth.currentUser!.email) {
@@ -116,46 +153,40 @@ class _SearchPageState extends State<SearchPage> {
                         return SearchUserTile(
                           text: userData['uniqueUsername'],
                           image: ProfileImage(imageUrl: userData['imageurl']),
-                          onTap: () {
+                          onTap: () async {
                             if (!isFriend) {
-                              addFriend(_auth.currentUser!.uid, userData['uid']);
+                              addFriend(
+                                  _auth.currentUser!.uid, userData['uid']);
                             }
                             setState(() {
                               myFriends.add(userId);
                             });
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChatRoom(
-                                  senderID: userData['email'],
-                                  reciverID: userData['uid'],
-                                  Username: userData['username'],
-                                  image: ProfileImage(imageUrl: userData['imageurl']),
-                                  uniqueUsername: userData['uniqueUsername'], isverfies: userData['Isverified'],
-                                ),
-                              ),
-                            );
+                            String currentUserName =
+                            await fetchCurrentUsername();
+                            navigateToChatRoom(userData, currentUserName);
                           },
                           name: userData['username'],
-                          icon: Icon(isFriend ? Icons.check_circle : Icons.person_add_alt_1,color: Colors.blueAccent,),
+                          icon: Icon(
+                            isFriend
+                                ? Icons.check_circle
+                                : Icons.person_add_alt_1,
+                            color: Colors.blueAccent,
+                          ),
                           onTapProfile: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => Seeuserprofile(
-                                    image:  ProfileImage(imageUrl: userData['imageurl']),
-                                    username: userData['username'],
-                                    uniquename: userData['uniqueUsername'],
-                                  verfied:  Icon(userData['Isverified'] ? Icons.verified_rounded : null,
-                                  color: Colors.greenAccent,),
-                                )
+                                    image: ProfileImage(imageUrl: userData['imageurl']),
+                                  username: userData['username'],
+                                  uniquename: userData['uniqueUsername'],
+                                  verfied: Icon(userData['Isverified'] ? Icons.verified_rounded : null,),
                               ),
-                            );
-                          }, Verfiedicon: Icon(userData['Isverified'] ? Icons.verified_rounded : null,
-                          color: Colors.greenAccent,),
+                            ));
+                          }, Verfiedicon: Icon(userData['Isverified'] ? Icons.verified_rounded : null),
                         );
                       }
-                      return const SizedBox();
+                      return const SizedBox.shrink();
                     },
                   );
                 },
@@ -168,37 +199,26 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<List<DocumentSnapshot>> _searchUsers(String query) async {
-
-    QuerySnapshot uniqueUsernameSnapshot = await _firestore
-        .collection('Users')
-        .where('uniqueUsernameLower', isGreaterThanOrEqualTo: query)
-        .where('uniqueUsernameLower', isLessThanOrEqualTo: query + '\uf8ff')
-        .get();
-
-    QuerySnapshot usernameSnapshot = await _firestore
-        .collection('Users')
-        .where('usernameLower', isGreaterThanOrEqualTo: query)
-        .where('usernameLower', isLessThanOrEqualTo: query + '\uf8ff')
-        .get();
-
-    final allDocs = uniqueUsernameSnapshot.docs + usernameSnapshot.docs;
-    final uniqueDocs = {for (var doc in allDocs) doc.id: doc}.values.toList();
-
-    return uniqueDocs;
+    final userSnapshot = await _firestore.collection('Users').get();
+    return userSnapshot.docs
+        .where((doc) =>
+    (doc.data() as Map<String, dynamic>)['username']
+        .toString()
+        .toLowerCase()
+        .contains(query) ||
+        (doc.data() as Map<String, dynamic>)['uniqueUsername']
+            .toString()
+            .toLowerCase()
+            .contains(query))
+        .toList();
   }
 
-  Future<void> addFriend(String currentUserId, String friendUserId) async {
-    DocumentReference currentUserDoc = _firestore.collection('Users').doc(currentUserId);
-    DocumentReference friendDoc = _firestore.collection('Users').doc(friendUserId);
-
-    await currentUserDoc.collection('myfriends').doc(friendUserId).set({
-      'friendRef': friendDoc,
-      'addedAt': FieldValue.serverTimestamp(),
-    });
-
-    await friendDoc.collection('myfriends').doc(currentUserId).set({
-      'friendRef': currentUserDoc,
-      'addedAt': FieldValue.serverTimestamp(),
-    });
+  void addFriend(String currentUserId, String friendId) {
+    _firestore
+        .collection('Users')
+        .doc(currentUserId)
+        .collection('myfriends')
+        .doc(friendId)
+        .set({'friendRef': _firestore.collection('Users').doc(friendId)});
   }
 }
