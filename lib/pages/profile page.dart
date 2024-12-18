@@ -7,6 +7,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../components/loading.dart';
 import '../components/login_button.dart';
 import '../components/textfield.dart';
 import 'home_page.dart';
@@ -176,11 +177,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ignoring: !_isLoading,
               child: Container(
                 color: Colors.black.withOpacity(0.5),
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.blueAccent,
-                    backgroundColor: Colors.black,
-                  ),
+                child:  Center(
+                  child: Loading(),
                 ),
               ),
             ),

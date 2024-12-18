@@ -3,6 +3,7 @@ import 'package:coupchat/pages/seeUSERprofile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../components/chached_image.dart';
 import '../components/searchuserTile.dart';
@@ -129,8 +130,8 @@ class _SearchPageState extends State<SearchPage> {
                 future: _searchUsers(searchQuery!),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(color: Colors.grey),
+                    return  Center(
+                      child:  Lottie.asset('assets/srchanime.json'),
                     );
                   }
 
@@ -157,6 +158,7 @@ class _SearchPageState extends State<SearchPage> {
                             if (!isFriend) {
                               addFriend(
                                   _auth.currentUser!.uid, userData['uid']);
+                              addFriend(userData['uid'], _auth.currentUser!.uid);
                             }
                             setState(() {
                               myFriends.add(userId);

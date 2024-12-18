@@ -1,6 +1,7 @@
 import 'package:coupchat/pages/fcmToken.dart';
 import 'package:flutter/material.dart';
 import '../auth/auth_service.dart';
+import '../components/loading.dart';
 import '../components/login_button.dart';
 import '../components/signup_button.dart';
 import '../components/textfield.dart';
@@ -129,11 +130,8 @@ class _LoginPageState extends State<LoginPage> {
           if (_isLoading)
             IgnorePointer(
               ignoring: !_isLoading,
-              child: const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.blueAccent,
-                  backgroundColor: Colors.black,
-                ),
+              child:  Center(
+                child:Loading(),
               ),
             ),
         ],

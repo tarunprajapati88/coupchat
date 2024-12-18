@@ -3,6 +3,7 @@ import 'package:coupchat/pages/profile%20page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../auth/auth_service.dart';
+import '../components/loading.dart';
 import '../components/login_button.dart';
 import '../components/textfield.dart';
 
@@ -206,11 +207,8 @@ class _SignupPageState extends State<SignupPage> {
               ignoring: !_isLoading,
               child: Container(
                 color: Colors.black.withOpacity(0.5),
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.blueAccent,
-                    backgroundColor: Colors.black,
-                  ),
+                child:  Center(
+                  child:Loading(),
                 ),
               ),
             ),

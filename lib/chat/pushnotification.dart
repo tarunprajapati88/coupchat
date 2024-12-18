@@ -13,15 +13,17 @@ class PushNotificationService {
   static const Map<String, dynamic> serverAccountJsonKey = {
     "type": "service_account",
     "project_id": "coupchat1",
-    "private_key_id": "83c79d8939303f5cad8e920f8a2409c732955b84",
-    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDHDX/llTdU8vsh\n7iPl1QYaT85W8adT/PrnqkjcXkg0gnBJyzoV4kY7rG9e8tH4+3AKK7sbqGH71AB0\n98BCuaQ+1fglWmXLVNVvr5U0vCz5LSwinM1dvgU8ODFEQgsK3sjOVcEE+JxEtfHG\nMwiPosZOQyEwRWSb/2PtEQQcwuTCoavBMiAnPEuJeUOLyeEjvI+W58lYsFeR5htg\nNi7hkqvSz2IZFq5f6h2v6k+F01giBO1Zo338RUr77aYrfxGcxL0aiqaPvJyKLOot\n3GehbDPwFWDliijEaluP9xaaPrju6zA3udABmwED3R3HWLpyY30cTkVDSr3g00BS\nE2FgwmwtAgMBAAECggEAFCEh23I9D7qoudQuzim+Pb/vUmyKqtws9WuLhbmFHMZK\nG7RREfB5gMRd2OC+airnOCgW+mOLUR+t0iZRy42hdfdGamSbYbYZBXvgn14eQC6Y\nxYFM5Vt3hRD7rnbtTfKcpP0YEWwgxXQO2KfFiF0CJ9zzCMIjvADWNp2faFcvMh1g\netDqCZnHwQDfu2WpTyDnoGsSNQOpyeq8NYs69n/uNzCJUEqOtu+PEaMtlHrhKhjx\nLfoKBuh6MLYlwQXQIwleR+1ybTjXK3XnmNXw4Km5abEMIamR3+uT9nZRjg5zgxCb\npdvDSBOeW2hZodYwLi1pj8VR6yWop/shQCITCBqiowKBgQDN2y86q0vwCpg3FPG/\niAPu3nubsYwiNuiNLeeutd8BJCvHO4F5eDFCEVlFUmpNwRWXdb1ZB+k5Oj/2YyNz\n8wAHsTOvuHVHYxAjKsQkXDOUoGwylHLcwVbcAreG7VcJkNPVlmT4FxT5nHVujV3C\nZKkmU0h5+hxI87Ws5U/heVK3IwKBgQD3ihBiBEyL04ZruiLxlXSTnQdHqjKui1m2\n5gVSWawHk0gPGcTBla/vVLPLskNCAJhgJhjcgwI9FrPeSGxCBs0ZBNfKadaVtMEm\n7st7xw/KbA2eJydYUKkCIOh+1sHPBY28w2JvSC2sIKHpvTP2W/aRh5zMfAzW78n/\nYIGiZBksbwKBgHh7YWAQI6jBOqd6XadA3zRuCKBuQNtBkcgXZvMNRRDw76JyxGuo\nmgPWDY6SFt+dM5rq8UBrbeftnMQC8BwLzCe0YdDlv9ZhN2+ttxCk2heR8OGFmthz\nW/f2qx2QSZGyrxjiJgRB1ifll6F1obuFmK5yrgeeB/H2mY0wxRjtHilLAoGAMu8g\nsdpqmbbbiN0TBZyYESuVbOSTayDXQ/AOlkRHRoPCpwDJYH/ZZKiMGlTCzBjtQZN1\nOCJo2oMKXamPRQK7PvOlJ0wh0EoSGF24Vu69zAvxvWIXEW//ZqW40SiFVoCxCm81\nmOpEI4/PYRYCVCXWFVnPJLA9wBg0+ywzYGOyXlcCgYAYi0P/Dfw5dfXBMBsmVH5q\nzyzRzORvPLT7eaHhK9G+QMdeS34Lj2qchYtTpbTVH3G8ZAGwJB9U8D4YVrvqmPnm\nOnxMJgGs+lQ0qYUWzC7fncVGamXF1fN7gpz955aR4PPPrGpTx/UBqYS3gSUD1VtE\n9ofXhgQfc19cX4AXivvLug==\n-----END PRIVATE KEY-----\n",
-    "client_email": "coupchat1@appspot.gserviceaccount.com",
-    "client_id": "103530353896658803995",
+    "private_key_id": "83fb0b071a361a0bc3b0397b57d3ec0f7fee45db",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCiXCjAjvfmrmmF\nU6ZvZaDjqmNFR0CgRVGewwo2mQuoZP3J1l4zbQe6EQ2lQtmCvI2m+qSPy+x8ha75\npeTKEamB6o/H9Ae/xm7AK9XQZHNQgM0QOCOr5TIo12/1CyvVd5AvveipocDnDHcv\nIQn/PRruhkr4WG8+F4iDlw4Dk1fSi5tJga58ir3hxwKl2JG9c1rhlNcJbmvnUkLE\n1n5utz9ljuEXVWCh2Lf4iWzzWuXXtTWmXDTV+GvvaXZNYr0jSkbNfR0HoncbVmer\n4suG13ocld1YiKlEJ5WUXUMzGnwEfxHqvn+vCDs+xQTMbpaDmbRC/zRmE5ef1x0j\nkkeZTCIRAgMBAAECggEACiHBqkiRuEvMinUupvd625I7uSxJ4GaLAiMOPVt+In9Q\n5hpSTRfB+m7LgPNjwviUx2WPROj3JEssYOhlF2YUQ6b5W4NDQ4i0yxnBMUy/dHfh\nNCCouzalk25kTnCoxty7+vq5LPLK6LA6tM51QwATcOyg+4/7Oy75Rir0RS1Z9unF\nWxadTTK54/6e03d6rQMkxaOzNUnZJg90l6bYHlzaLy91yu0S3Sxr+KWq9U3z/LSZ\nX593FZN9JNc27F9jEw6OPOUi7CX0/PlONjs9eRz+pUZ2qN3HXDktqXg1OmFc26lO\nqOc1c5qHwi3uj0h4303u/CWnXjw65dYJV0lRw4GEAQKBgQDdAS2HShm81gMZH9Pf\nxN5nHDZSoHOhZgcXwlTbC837d/FWVFFLzfAQ30ElAcoGhqOxIcg8791dl8M+Cbx2\nMch9AgKOGFmThWjMxwroMrEVay1xjf+6caraqQXIfUzuX9zVdaw3Z1dZ68BnJSvJ\nOVP1tuhLH7KClOxsz3tRPsdnAQKBgQC8EbdLr7F80JSd6xdK9Ho8yVyGEc/Wu4hA\nbShQKxftZza686k4sfbSUQ/YNl0qc+G8lu23pFgytJTJOuHjE2Txz+ZL8I9Q6b2l\nMEYfHdmyl4SP01VbDLrdBkwXGXsJmKrqtcWorFh9AHlTatKvAgSgew4JkMSRxpUM\nCr+/e+FLEQKBgGE/cW9EtgqYCYj2rl6a3Fp22ZiGLhtpL9nOk1RH3322C6Y3OAap\nOefStXG5VdKFUGZTPS9DRR839pvH4PwJb/VB+ynXoSL+41yogS4nkDCilr6PA2Zh\nOhM5qOfN6xpBaIUtYHiIqrFQwbshaiEDbuSCdbkI254GNfqzWcooW8oBAoGAYQ1T\nZb94/Ew3JXdYQdn/6raPBLDUbJ/CJF0wXI6gfmaxG7D6NsO/97DVWGJVmb7LUyMf\n8ZDh4ujFj0LPpvsvMIp08eNmUf8NWt2akhw5Z6xBQGdyuNXM6JqDUbhYgg9CxHSh\nV/X4hClmcuHBb4a/FIHsMIuApSmxaNFzOkGXdcECgYAzHDdiTQLK7cFYh2lwHM71\nxBsVuLVm6UPtoaEnmfClZw1pYUsosU6E0kJ48q2O0cBerTucQOqJYERZj4LD82B8\nARFRO8kmgzTzPLDJP7KmuiAvfZ1IHQBzdqrBQVdNUalBX6pcvmzpAj1eB46O/nmK\neJ1dqDb6YRziS4OCM0zISQ==\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-yn1tm@coupchat1.iam.gserviceaccount.com",
+    "client_id": "108423707072594780333",
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/coupchat1%40appspot.gserviceaccount.com"
-  };
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-yn1tm%40coupchat1.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }
+  ;
 
   static Future<String> getAccessToken() async {
     final List<String> scopes = ["https://www.googleapis.com/auth/firebase.messaging"];

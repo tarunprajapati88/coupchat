@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 import '../chat/chat_service.dart';
 import '../components/chached_image.dart';
 import '../components/homedrawer.dart';
+import '../components/loading.dart';
 import '../components/user_tile.dart';
 import 'Searchpage.dart';
 import 'chat_room.dart';
@@ -79,7 +82,7 @@ class _HomePageState extends State<HomePage> {
               return const Center(child: Text('An error occurred.'));
             }
             if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
+              return  Center(child:Loading());
             }
 
             final currentUserData = snapshot.data!.firstWhere(
@@ -107,7 +110,7 @@ class _HomePageState extends State<HomePage> {
         index: currentPageIndex,
         children: <Widget>[
           friendList(),
-         SearchPage(),
+         const SearchPage(),
         ],
       ),
     );
@@ -127,7 +130,7 @@ class _HomePageState extends State<HomePage> {
           return const Center(child: Text('An error occurred.'));
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return  Center(child:   Loading());
         }
 
         final friendsDocs = snapshot.data!.docs;
@@ -162,7 +165,7 @@ class _HomePageState extends State<HomePage> {
               return const Center(child: Text('An error occurred.'));
             }
             if (!friendDetailsSnapshot.hasData) {
-              return const Center(child: CircularProgressIndicator(color: Colors.blueAccent,backgroundColor: Colors.black,));
+              return   Center(child:  Loading());
             }
 
             final friendDetails = friendDetailsSnapshot.data!;
@@ -240,7 +243,7 @@ class _HomePageState extends State<HomePage> {
           Username: friendData['username'],
           image: ProfileImage(imageUrl: friendData['imageurl']),
           uniqueUsername: friendData['uniqueUsername'],
-          isverfies: friendData['Isverified'], currentUserName: '',
+          isverfies: friendData['Isverified'], currentUserName:name,
         ),
       ),
     );
