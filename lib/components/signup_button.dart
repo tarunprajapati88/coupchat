@@ -28,6 +28,7 @@ class SignupButton extends StatelessWidget {
         ),
         child:  Center(child: Text( name,style: const TextStyle(
           fontSize: 15,
+            fontFamily: 'PlaywriteCU',
           fontWeight:FontWeight.w500 ,
           color: Colors.white
         ),)),

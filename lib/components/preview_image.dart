@@ -12,7 +12,7 @@ class ImagePreviewScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Image Preview",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontFamily: 'PlaywriteCU'),
         ),
         backgroundColor: Colors.black,
         iconTheme: const IconThemeData(color: Colors.white),

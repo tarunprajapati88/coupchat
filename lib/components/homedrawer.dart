@@ -45,6 +45,7 @@ final bool ISuserVerified;
                  children: [
                    Text('~${useridname!}',
                    style: const TextStyle(
+                       fontFamily: 'PlaywriteCU',
                      fontSize: 25
                    ),),
                    Icon(ISuserVerified?Icons.verified_rounded:null)
@@ -75,7 +76,7 @@ final bool ISuserVerified;
                        children: [
                          Icon(Icons.edit),
                          SizedBox(width: 10,),
-                         Text('E D I T  P R O F I L E')
+                         Text('E D I T  P R O F I L E',style: TextStyle( fontFamily: 'PlaywriteCU'),)
                        ],
                      ),
                    ),
@@ -107,7 +108,7 @@ final bool ISuserVerified;
                   children: [
                     Icon(Icons.logout),
                     SizedBox(width: 10,),
-                    Text('L O G O U T')
+                    Text('L O G O U T',style: TextStyle( fontFamily: 'PlaywriteCU'),)
                   ],
                   ),
                 ),

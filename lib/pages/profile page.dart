@@ -102,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         backgroundColor: Colors.grey.shade200,
-        title: const Text('Create Profile'),
+        title: const Text('Create Profile',style: TextStyle( fontFamily: 'PlaywriteCU',),),
       ),
       body: Stack(
         children: [

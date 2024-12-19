@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:lottie/lottie.dart';
 import '../chat/chat_service.dart';
 import '../components/chached_image.dart';
 import '../components/homedrawer.dart';
@@ -63,11 +61,11 @@ class _HomePageState extends State<HomePage> {
           }),
         ],
         title: const Text(
-          'CoupChat',
+          'linq',
           style: TextStyle(
-            fontFamily: 'PlaywriteCU',
+           fontFamily: 'PlaywriteCU',
             fontWeight: FontWeight.w700,
-            fontSize: 20,
+            fontSize: 30,
             color: Colors.black,
           ),
         ),

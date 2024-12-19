@@ -58,6 +58,10 @@ dependencies:
   just_audio: ^0.9.42
   flutter_notification_channel: ^3.1.0
   flutter_local_notifications: ^18.0.1
+  launcher_name: ^1.0.2
+
+launcher_name:
+  default: "linq"
 
 flutter_icons:
   android: true
@@ -117,9 +121,12 @@ flutter:
   #         style: italic
      - family: PlaywriteCU
        fonts:
-         - asset: font/PlaywriteCU-Regular.ttf
+         - asset: font/Exo2-Regular.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+     - family: RobotoMono-
+       fonts:
+         - asset: font/RobotoMono-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

@@ -66,20 +66,33 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'CoupChat',
-                      style: TextStyle(
-                        fontFamily: 'PlaywriteCU',
-                        fontSize: 40,
-                        color: Colors.black,
-                      ),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                         Text(
+                          'linq',
+                          style: TextStyle(
+                            fontFamily: 'PlaywriteCU',
+                            fontSize: 50,
+                            color: Colors.black,
+                          ),
+                        ),
+
+                        Column(
+                          children: [
+                            Icon(Icons.message_outlined,size: 40,),
+                            SizedBox(height: 30,)
+                          ],
+                        ),
+
+                      ],
                     ),
                     const SizedBox(height: 70),
                     const Text(
                       'Welcome back, login to continue',
                       style: TextStyle(
                         fontFamily: 'PlaywriteCU',
-                        fontSize: 17,
+                        fontSize: 18,
                         color: Colors.black,
                       ),
                     ),
@@ -110,6 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(
                               color: Colors.blueAccent,
                               fontWeight: FontWeight.w500,
+                                fontFamily: 'PlaywriteCU'
                             ),
                           ),
                         ),

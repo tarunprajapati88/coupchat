@@ -47,7 +47,7 @@ class _EditProfileState extends State<EditProfile> {
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         backgroundColor: Colors.grey[300],
-        title: const Text('Edit Profile'),
+        title: const Text('Edit Profile',style: TextStyle(fontFamily: 'PlaywriteCU',),),
       ),
       body: Stack(
         children: [

@@ -19,6 +19,7 @@ class MyTextfield2 extends StatelessWidget {
     return TextField(
       decoration: InputDecoration(
           hintStyle: const TextStyle(
+              fontFamily: 'PlaywriteCU',
               color: Colors.grey
           ),
           border: InputBorder.none,

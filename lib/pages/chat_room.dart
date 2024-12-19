@@ -117,10 +117,23 @@ class _ChatRoomState extends State<ChatRoom> {
                   image: widget.image,
                   username: widget.Username,
                   uniquename: widget.uniqueUsername,
-                  verfied: Icon(
-                    widget.isverfies ? Icons.verified_rounded : null,
-                    color: Colors.greenAccent,
-                  ),
+                  verfied: widget.isverfies ?Row(
+                    children: [
+                      Text(widget.Username,
+                        style:  const TextStyle(
+                            fontFamily: 'PlaywriteCU',
+                            fontSize: 30),),
+                      const Icon( Icons.verified_rounded ,color: Colors.blueAccent,size: 21,),
+                      const SizedBox(width: 3,)
+                    ],
+                  ):Row(
+                    children: [  Text(widget.Username,
+                        style: const TextStyle(
+                            fontFamily: 'PlaywriteCU',
+                            fontSize: 30)
+                    )
+                    ],
+                  )
                 ),
               ),
             );
@@ -129,11 +142,13 @@ class _ChatRoomState extends State<ChatRoom> {
             children: [
               Text(
                 widget.Username,
-                style: const TextStyle(),
+                style: const TextStyle( fontFamily: 'PlaywriteCU'),
               ),
+              const SizedBox(width: 3,),
               Icon(
                 widget.isverfies ? Icons.verified_rounded : null,
-                color: Colors.greenAccent,
+                color: Colors.black87,
+                size: 18,
               )
             ],
           ),
@@ -210,6 +225,7 @@ class _ChatRoomState extends State<ChatRoom> {
                   Text(
                     formattedTime,
                     style: TextStyle(
+                      fontFamily: 'PlaywriteCU',
                       fontWeight: FontWeight.w400,
                       fontSize: 10,
                       color: isCurrentuser
@@ -272,6 +288,7 @@ class _ChatRoomState extends State<ChatRoom> {
                           fontWeight: FontWeight.w400,
                           fontSize: 10,
                           color: Colors.grey[500],
+                             fontFamily: 'PlaywriteCU'
 
                         ),
                       ),
@@ -309,11 +326,13 @@ class _ChatRoomState extends State<ChatRoom> {
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     color: Colors.grey[800],
+                      fontFamily: 'PlaywriteCU'
                   ),
                 ),
                 Text(
                   formattedTime,
                   style: TextStyle(
+                    fontFamily: 'PlaywriteCU',
                     fontWeight: FontWeight.w400,
                     fontSize: 10,
                     color: isCurrentuser
@@ -341,9 +360,7 @@ class _ChatRoomState extends State<ChatRoom> {
               : IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-
-
-              showMenu(
+              showMenu(color: Colors.grey[100],
                 context: context,
                 position: const RelativeRect.fromLTRB(00, 550, 0, 0),
                 items: [
@@ -352,21 +369,21 @@ class _ChatRoomState extends State<ChatRoom> {
                     value: 'option1',
                     child: const Row(children: [
                       Icon(Icons.photo),
-                      Text('Media')
+                      Text('Media',style: TextStyle( fontFamily: 'PlaywriteCU'),)
                     ],)
                   ),
                   const PopupMenuItem(
                     value: 'option2',
                     child: Row(children: [
                       Icon(Icons.file_copy),
-                      Text('Document')
+                      Text('Document',style: TextStyle( fontFamily: 'PlaywriteCU'))
                     ],)
                   ),
                   const PopupMenuItem(
                     value: 'option3',
                     child: Row(children: [
                       Icon(Icons.add_location),
-                      Text('Location')
+                      Text('Location',style: TextStyle( fontFamily: 'PlaywriteCU'))
                     ],)
                   ),
                 ],
@@ -524,7 +541,7 @@ class _ChatRoomState extends State<ChatRoom> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              title: const Text('Preview'),
+              title:  const Text('Preview',style: TextStyle(fontFamily: 'PlaywriteCU',),),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -545,7 +562,7 @@ class _ChatRoomState extends State<ChatRoom> {
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.redAccent,
+                            backgroundColor: Colors.grey,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),

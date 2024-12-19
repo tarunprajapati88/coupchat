@@ -53,18 +53,24 @@ class SearchUserTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          text,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              text,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                  fontFamily: 'PlaywriteCU'
+                              ),
+                            ),
+                            const SizedBox(width: 3,),
+                            Verfiedicon
+                          ],
                         ),
-                        Text(name),
+                        Text(name,style: const TextStyle( fontFamily: 'PlaywriteCU'),),
                       ],
                     ),
-                    SizedBox(width: 8,),
-                    Verfiedicon
+
                   ],
                 ),
               ),

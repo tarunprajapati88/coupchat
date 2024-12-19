@@ -20,6 +20,7 @@ class LoginButton extends StatelessWidget {
       child:  Center(child: Text( name,style: const TextStyle(
         fontSize: 15,
         fontWeight:FontWeight.w500 ,
+          fontFamily: 'PlaywriteCU'
       ),)),
     );
   }

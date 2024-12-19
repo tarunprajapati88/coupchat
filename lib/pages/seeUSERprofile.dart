@@ -5,20 +5,22 @@ class Seeuserprofile extends StatelessWidget {
  final Widget? image;
   final String username;
   final String uniquename;
-  final Icon verfied;
+  final Row verfied;
 
  const Seeuserprofile({super.key,
   required this.image,
    required this.username,
    required this.uniquename,
-   required this.verfied
+    required this.verfied
   });
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: AppBar(title: const Text('User Profile'),backgroundColor: Colors.grey.shade300,),
+      appBar: AppBar(title: const Text('User Profile',
+        style: TextStyle(fontFamily: 'PlaywriteCU',),),
+        backgroundColor: Colors.grey.shade300,),
       body: Column(
         children: [
           const SizedBox(height: 40,),
@@ -29,15 +31,12 @@ class Seeuserprofile extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Text(username,style:
-                  const TextStyle(
-                    fontSize: 25
-                  ),),
-                  Text("@"+uniquename),
+                  verfied,
+                  Text("@"+uniquename,style: const TextStyle( fontFamily: 'PlaywriteCU'),),
                 ],
               ),
               const SizedBox(width: 8,),
-              verfied
+
             ],
           ),
 

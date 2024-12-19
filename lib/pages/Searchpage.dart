@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coupchat/pages/seeUSERprofile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
 import '../components/chached_image.dart';
 import '../components/searchuserTile.dart';
 import 'chat_room.dart';
@@ -105,7 +103,7 @@ class _SearchPageState extends State<SearchPage> {
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                   ),
                   hintText: 'Search Users...',
-                  hintStyle: const TextStyle(color: Colors.grey),
+                  hintStyle: const TextStyle(color: Colors.grey, fontFamily: 'PlaywriteCU'),
                   prefixIcon: const Icon(Icons.search),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.clear),
@@ -125,7 +123,7 @@ class _SearchPageState extends State<SearchPage> {
             const SizedBox(height: 10),
             Expanded(
               child: searchQuery == null || searchQuery!.isEmpty
-                  ? const Center(child: Text('Enter text to search'))
+                  ? const Center(child: Text('Enter text to search',style: TextStyle( fontFamily: 'PlaywriteCU'),))
                   : FutureBuilder<List<DocumentSnapshot>>(
                 future: _searchUsers(searchQuery!),
                 builder: (context, snapshot) {
@@ -136,7 +134,7 @@ class _SearchPageState extends State<SearchPage> {
                   }
 
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('No users found.'));
+                    return const Center(child: Text('No users found.',style: TextStyle( fontFamily: 'PlaywriteCU'),));
                   }
 
                   final userDocs = snapshot.data!;
@@ -172,7 +170,7 @@ class _SearchPageState extends State<SearchPage> {
                             isFriend
                                 ? Icons.check_circle
                                 : Icons.person_add_alt_1,
-                            color: Colors.blueAccent,
+                            color: Colors.green,
                           ),
                           onTapProfile: () {
                             Navigator.push(
@@ -182,10 +180,30 @@ class _SearchPageState extends State<SearchPage> {
                                     image: ProfileImage(imageUrl: userData['imageurl']),
                                   username: userData['username'],
                                   uniquename: userData['uniqueUsername'],
-                                  verfied: Icon(userData['Isverified'] ? Icons.verified_rounded : null,),
+                                  verfied: userData['Isverified'] ?Row(
+                                    children: [
+                                      Text(userData['username'],
+                                        style:  const TextStyle(
+                                            fontFamily: 'PlaywriteCU',
+                                            fontSize: 30),),
+
+                                      const SizedBox(width: 3,),
+                                      const Icon( Icons.verified_rounded ,color: Colors.blueAccent,size: 21,),
+                                    ],
+                                  ):Row(
+                                    children: [  Text(userData['username'],
+                                      style: const TextStyle(
+                                          fontFamily: 'PlaywriteCU',
+                                          fontSize: 30)
+                                    )
+                                    ],
+                                  )
                               ),
                             ));
-                          }, Verfiedicon: Icon(userData['Isverified'] ? Icons.verified_rounded : null),
+                          }, Verfiedicon: Icon(userData['Isverified'] ?
+                        Icons.verified_rounded : null,
+                          size: 18,
+                          color: Colors.blueAccent,),
                         );
                       }
                       return const SizedBox.shrink();

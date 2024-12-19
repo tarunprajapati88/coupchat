@@ -20,12 +20,14 @@ class MyTextfield extends StatelessWidget {
     return TextField(
       decoration: InputDecoration(
         hintStyle: const TextStyle(
-          color: Colors.grey
+          color: Colors.grey,
+            fontFamily: 'PlaywriteCU'
         ),
         border: InputBorder.none,
        filled: true,
         fillColor: Colors.grey.shade100,
         hintText: name,
+        helperStyle: const TextStyle( fontFamily: 'PlaywriteCU'),
         prefixIcon: icon,
         prefixIconColor: Colors.grey,
         enabledBorder: const OutlineInputBorder(

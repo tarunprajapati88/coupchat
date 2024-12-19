@@ -66,6 +66,7 @@ class Usertile extends StatelessWidget {
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w500,
+                                    fontFamily: 'PlaywriteCU'
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),verfied,
@@ -91,19 +92,19 @@ class Usertile extends StatelessWidget {
                             latestMsg['message'] ?? "",
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
-                            style: const TextStyle(color: Colors.black54),
+                            style: const TextStyle(color: Colors.black54, fontFamily: 'PlaywriteCU'),
                           ),
                         ),
                         if(latestMsg['type']=='voicenote') const Row(
                           children: [
-                            Icon(Icons.mic_none_sharp,color: Colors.grey,),
-                            Text('Voicenote'),
+                            Icon(Icons.mic_none_sharp,color: Colors.grey,size: 18,),
+                            Text('Voicenote',style: TextStyle( fontFamily: 'PlaywriteCU'),),
                           ],
                         ),
                         if(latestMsg['type']=='image')  const Row(
                           children: [
-                            Icon(Icons.image,color: Colors.grey,),
-                            Text('Image'),
+                            Icon(Icons.image,color: Colors.grey,size: 18,),
+                            Text('Image',style: TextStyle( fontFamily: 'PlaywriteCU'),),
                           ],
                         ),
                       ],
@@ -115,20 +116,20 @@ class Usertile extends StatelessWidget {
                           latestMsg['message'] ?? "",
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
-                            style: const TextStyle(color: Colors.black54),
+                            style: const TextStyle(color: Colors.black54, fontFamily: 'PlaywriteCU'),
                         ),
                         )  :
                         latestMsg['type']=='voicenote'?
                           const Row(
                            children: [
-                        Icon(Icons.mic_none_sharp,color: Colors.grey,),
-                       Text('Voicenote'),
+                        Icon(Icons.mic_none_sharp,color: Colors.grey,size: 18,),
+                       Text('Voicenote',style: TextStyle( fontFamily: 'PlaywriteCU'),),
                        ],
                         ):
                         const Row(
                                children: [
-                                Icon(Icons.image,color: Colors.grey,),
-                         Text('Image'),
+                                Icon(Icons.image,color: Colors.grey,size: 18,),
+                         Text('Image',style: TextStyle( fontFamily: 'PlaywriteCU'),),
                               ],
                             )
 
@@ -137,7 +138,7 @@ class Usertile extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Icon(
-                          Icons.fiber_new_rounded,color: Colors.blue,
+                          Icons.fiber_new_rounded,color: Colors.blue,size: 18,
                         ),
                         const SizedBox(width: 5),
                           if(latestMsg['type']=='text')
@@ -146,20 +147,20 @@ class Usertile extends StatelessWidget {
                             latestMsg['message'] ?? "",
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
-                            style: const TextStyle(color: Colors.black54),
+                            style: const TextStyle(color: Colors.black54, fontFamily: 'PlaywriteCU'),
                           ),
                         ),
                         if(latestMsg['type']=='voicenote') const Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Icon(Icons.mic_none_sharp,color: Colors.grey,),
-                            Text('Voicenote'),
+                            Icon(Icons.mic_none_sharp,color: Colors.grey,size: 18,),
+                            Text('Voicenote',style: TextStyle( fontFamily: 'PlaywriteCU'),),
                           ],
                         ),
                         if(latestMsg['type']=='image')  const Row(
                           children: [
-                            Icon(Icons.image,color: Colors.grey),
-                            Text('Image'),
+                            Icon(Icons.image,color: Colors.grey,size: 18,),
+                            Text('Image',style: TextStyle( fontFamily: 'PlaywriteCU'),),
                           ],
                         ),
 
@@ -169,7 +170,7 @@ class Usertile extends StatelessWidget {
                 ),
               ),
 
-              Text(formattedTime,style: const TextStyle(color: Colors.grey,fontSize: 10)),
+              Text(formattedTime,style: const TextStyle(color: Colors.grey,fontSize: 10, fontFamily: 'PlaywriteCU')),
               const SizedBox(width: 5),
             ],
           ),
@@ -217,24 +218,27 @@ class Usertile extends StatelessWidget {
                                     style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500,
+                                        fontFamily: 'PlaywriteCU'
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),verfied,
                                 ],
                               ),
-                              Text('Say Hii to your new fiend!!!',style: TextStyle(color: Colors.blueAccent),)
+                              const Text('Say Hii to your new fiend!!!',
+                                style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontFamily: 'PlaywriteCU'
+                                ),
+                              )
                             ],
                           ),
                         ),
-                        
                       ],
                     ),
                     const SizedBox(height: 2),
-
                   ],
                 ),
               ),
-
             ],
           ),
         ),
