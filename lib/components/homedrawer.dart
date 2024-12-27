@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coupchat/components/prfofile_photo.dart';
+import 'package:coupchat/components/themes.dart';
+import 'package:coupchat/components/themeselector.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../pages/edit_profile.dart';
@@ -28,7 +30,7 @@ final bool ISuserVerified;
   @override
   Widget build(BuildContext context) {
     final tilelen = MediaQuery.of(context).size.width;
-
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return Container(
       padding: const EdgeInsets.all(2),
       child: Padding(
@@ -44,13 +46,15 @@ final bool ISuserVerified;
                  mainAxisAlignment: MainAxisAlignment.center,
                  children: [
                    Text('~${useridname!}',
-                   style: const TextStyle(
+                   style:  TextStyle(
                        fontFamily: 'PlaywriteCU',
-                     fontSize: 25
+                     fontSize: 25,
+                     color: themeColors[7]
                    ),),
-                   Icon(ISuserVerified?Icons.verified_rounded:null)
+                   Icon(ISuserVerified?Icons.verified_rounded:null,color: Colors.blueAccent,size: 18,)
                  ],
                ),
+
                const SizedBox(height: 30,),
                GestureDetector(
                  onTap: (){
@@ -64,27 +68,28 @@ final bool ISuserVerified;
                  },
                  child: DecoratedBox(
                    decoration: BoxDecoration(
-                     color: Colors.white,
+                     color: themeColors[3],
                      borderRadius: BorderRadius.circular(10),
                    ),
                    child: Container(
                      padding: const EdgeInsets.only(left: 10),
                      height: 50,
-                     child: const
+                     child:
                      Row(
                        mainAxisAlignment: MainAxisAlignment.start,
                        children: [
-                         Icon(Icons.edit),
+                         Icon(Icons.edit,color: themeColors[7],),
                          SizedBox(width: 10,),
-                         Text('E D I T  P R O F I L E',style: TextStyle( fontFamily: 'PlaywriteCU'),)
+                         Text('E D I T  P R O F I L E',style: TextStyle( fontFamily: 'PlaywriteCU',color: themeColors[7]),)
                        ],
                      ),
                    ),
                  ),
-               )
+               ),
+               SizedBox(height: 6,),
+               ChangeThemeWidget(onThemeSelected: (int ) {  },),
              ],
            ),
-
             GestureDetector(
               onTap: ()  async {
              await   FCM.updateFcmTokenInFirestore(false);
@@ -96,19 +101,19 @@ final bool ISuserVerified;
                      },
               child: DecoratedBox(
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color:themeColors[3],
                   borderRadius: BorderRadius.circular(10),
                 ),
                   child: Container(
                   padding: const EdgeInsets.only(left: 10),
                   height: 50,
-                  child: const
+                  child:
                   Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Icon(Icons.logout),
+                    Icon(Icons.logout,color: themeColors[7],),
                     SizedBox(width: 10,),
-                    Text('L O G O U T',style: TextStyle( fontFamily: 'PlaywriteCU'),)
+                    Text('L O G O U T',style: TextStyle( fontFamily: 'PlaywriteCU',color: themeColors[7]),)
                   ],
                   ),
                 ),

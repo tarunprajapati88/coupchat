@@ -6,6 +6,7 @@ import '../auth/auth_service.dart';
 import '../components/loading.dart';
 import '../components/login_button.dart';
 import '../components/textfield.dart';
+import '../components/themes.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -26,6 +27,7 @@ class _SignupPageState extends State<SignupPage> {
   final FocusNode _focusNode3=FocusNode();
 
   Future<void> signup(BuildContext context) async{
+
   setState(() {
     _isLoading = true;
   });
@@ -124,11 +126,11 @@ class _SignupPageState extends State<SignupPage> {
 }
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: themeColors[1],
       body: Stack(
         children:[
-          
           Center(
             child: SingleChildScrollView(
             child: Padding(
@@ -137,7 +139,7 @@ class _SignupPageState extends State<SignupPage> {
             
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -145,13 +147,13 @@ class _SignupPageState extends State<SignupPage> {
                         style: TextStyle(
                           fontFamily: 'PlaywriteCU',
                           fontSize: 50,
-                          color: Colors.black,
+                          color:themeColors[16],
                         ),
                       ),
 
                       Column(
                         children: [
-                          Icon(Icons.message_outlined,size: 40,),
+                          Icon(Icons.message_outlined,size: 40,color: themeColors[16],),
                           SizedBox(height: 30,)
                         ],
                       ),
@@ -161,11 +163,11 @@ class _SignupPageState extends State<SignupPage> {
                   const SizedBox(
                     height: 70,
                   ),
-                  const Text('Create a new account !!',
+                   Text('Create a new account !!',
                     style: TextStyle(
                       fontFamily: 'PlaywriteCU',
                       fontSize: 17,
-                      color: Colors.black,
+                      color: themeColors[16],
             
                     ),),
                   const SizedBox(
@@ -204,7 +206,7 @@ class _SignupPageState extends State<SignupPage> {
                     height: 13,
                   ),
             
-                  GestureDetector(child:  LoginButton(name: 'Sign Up', color: Colors.grey.shade400, ),
+                  GestureDetector(child:  LoginButton(name: 'Sign Up', color: themeColors[0] ),
                   onTap: ()=>signup(context),
                   ),
                   const SizedBox(

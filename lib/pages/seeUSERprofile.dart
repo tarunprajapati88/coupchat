@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/prfofile_photo.dart';
+import '../components/themes.dart';
 
 class Seeuserprofile extends StatelessWidget {
  final Widget? image;
@@ -16,11 +17,14 @@ class Seeuserprofile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return  Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(title: const Text('User Profile',
-        style: TextStyle(fontFamily: 'PlaywriteCU',),),
-        backgroundColor: Colors.grey.shade300,),
+      backgroundColor:themeColors[1],
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: themeColors[6]),
+        title:  Text('User Profile',
+        style: TextStyle(fontFamily: 'PlaywriteCU',color: themeColors[6]),),
+        backgroundColor:themeColors[0],),
       body: Column(
         children: [
           const SizedBox(height: 40,),
@@ -32,7 +36,7 @@ class Seeuserprofile extends StatelessWidget {
               Column(
                 children: [
                   verfied,
-                  Text("@"+uniquename,style: const TextStyle( fontFamily: 'PlaywriteCU'),),
+                  Text("@"+uniquename,style:  TextStyle( fontFamily: 'PlaywriteCU',color: themeColors[6]),),
                 ],
               ),
               const SizedBox(width: 8,),

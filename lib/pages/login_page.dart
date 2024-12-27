@@ -5,6 +5,7 @@ import '../components/loading.dart';
 import '../components/login_button.dart';
 import '../components/signup_button.dart';
 import '../components/textfield.dart';
+import '../components/themes.dart';
 import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -55,8 +56,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: themeColors[1],
       body: Stack(
         children: [
           Center(
@@ -66,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Row(
+                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                          Text(
@@ -74,13 +76,13 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(
                             fontFamily: 'PlaywriteCU',
                             fontSize: 50,
-                            color: Colors.black,
+                            color:themeColors[16],
                           ),
                         ),
 
                         Column(
                           children: [
-                            Icon(Icons.message_outlined,size: 40,),
+                            Icon(Icons.message_outlined,size: 40,color: themeColors[16],),
                             SizedBox(height: 30,)
                           ],
                         ),
@@ -88,12 +90,12 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     const SizedBox(height: 70),
-                    const Text(
+                     Text(
                       'Welcome back, login to continue',
                       style: TextStyle(
                         fontFamily: 'PlaywriteCU',
                         fontSize: 18,
-                        color: Colors.black,
+                        color: themeColors[16],
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -131,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 7),
                     GestureDetector(
-                      child:  LoginButton(name: 'LOGIN', color: Colors.grey.shade400,),
+                      child:  LoginButton(name: 'LOGIN', color:themeColors[0],),
                       onTap: () => login(context),
                     ),
                     const SizedBox(height: 7),

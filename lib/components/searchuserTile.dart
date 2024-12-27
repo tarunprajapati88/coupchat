@@ -1,4 +1,5 @@
 import 'package:coupchat/components/prfofile_photo.dart';
+import 'package:coupchat/components/themes.dart';
 import 'package:flutter/material.dart';
 
 class SearchUserTile extends StatelessWidget {
@@ -24,13 +25,14 @@ class SearchUserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     final tilelen = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
       child: Container(
         height: tilelen / 11,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: themeColors[3],
           borderRadius: BorderRadius.circular(5),
         ),
         child: Row(
@@ -57,7 +59,8 @@ class SearchUserTile extends StatelessWidget {
                           children: [
                             Text(
                               text,
-                              style: const TextStyle(
+                              style:  TextStyle(
+                                color: themeColors[7],
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
                                   fontFamily: 'PlaywriteCU'
@@ -67,7 +70,7 @@ class SearchUserTile extends StatelessWidget {
                             Verfiedicon
                           ],
                         ),
-                        Text(name,style: const TextStyle( fontFamily: 'PlaywriteCU'),),
+                        Text(name,style:  TextStyle( fontFamily: 'PlaywriteCU',color: themeColors[7]),),
                       ],
                     ),
 

@@ -5,6 +5,7 @@ import '../chat/chat_service.dart';
 import '../components/chached_image.dart';
 import '../components/homedrawer.dart';
 import '../components/loading.dart';
+import '../components/themes.dart';
 import '../components/user_tile.dart';
 import 'Searchpage.dart';
 import 'chat_room.dart';
@@ -25,20 +26,22 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return Scaffold(
       bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: themeColors[4],
         selectedIndex: currentPageIndex,
-        indicatorColor: Colors.grey[350],
-        destinations: const <Widget>[
+        indicatorColor: themeColors[5],
+        destinations:  <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.message),
-            icon: Icon(Icons.message_outlined),
+            selectedIcon: Icon(Icons.message,color: themeColors[6],),
+            icon: Icon(Icons.message_outlined,color: themeColors[6],),
             label: 'Chats',
+
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_add_alt),
-            selectedIcon: Icon(Icons.person_add_alt_1),
+            icon: Icon(Icons.person_add_alt,color: themeColors[6],),
+            selectedIcon: Icon(Icons.person_add_alt_1,color: themeColors[6],),
             label: 'Add Users',
           ),
         ],
@@ -48,7 +51,7 @@ class _HomePageState extends State<HomePage> {
           });
         },
       ),
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: themeColors[1],//grey.shade100
       appBar: AppBar(
         actions: [
           Builder(builder: (context) {
@@ -56,23 +59,23 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Scaffold.of(context).openEndDrawer();
               },
-              icon: const Icon(Icons.settings),
+              icon:  Icon(Icons.settings,color: themeColors[6],),
             );
           }),
         ],
-        title: const Text(
+        title:  Text(
           'linq',
           style: TextStyle(
            fontFamily: 'PlaywriteCU',
             fontWeight: FontWeight.w700,
             fontSize: 30,
-            color: Colors.black,
+            color:themeColors[6],
           ),
         ),
-        backgroundColor: Colors.grey[300],
+        backgroundColor: themeColors[0],
       ),
       endDrawer: Drawer(
-        backgroundColor: Colors.grey.shade200,
+        backgroundColor:themeColors[2],
         child: StreamBuilder<List<Map<String, dynamic>>>(
           stream: _chatservice.getUsersStrean(),
           builder: (context, snapshot) {
@@ -116,7 +119,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget friendList() {
     final String currentUserId = _auth.currentUser!.uid;
-
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('Users')
@@ -143,7 +146,7 @@ class _HomePageState extends State<HomePage> {
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: Colors.grey,
+                backgroundColor:themeColors[0],
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18),

@@ -15,6 +15,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:lottie/lottie.dart';
 import '../components/preview_image.dart';
+import '../components/themes.dart';
 import '../components/voice_message.dart';
 
 class ChatRoom extends StatefulWidget {
@@ -92,15 +93,16 @@ class _ChatRoomState extends State<ChatRoom> {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     final tilelen = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: themeColors[1],
       appBar: AppBar(
         leadingWidth: tilelen / 7.5,
         titleSpacing: 0,
         leading: Row(
           children: [
-            const BackButton(),
+             BackButton(color:themeColors[6] ,),
             PrfofilePhoto(
               image: widget.image,
               height: tilelen / 18.5,
@@ -120,15 +122,18 @@ class _ChatRoomState extends State<ChatRoom> {
                   verfied: widget.isverfies ?Row(
                     children: [
                       Text(widget.Username,
-                        style:  const TextStyle(
+                        style:  TextStyle(
+                          color: themeColors[6],
                             fontFamily: 'PlaywriteCU',
                             fontSize: 30),),
+                      const SizedBox(width: 3,),
                       const Icon( Icons.verified_rounded ,color: Colors.blueAccent,size: 21,),
-                      const SizedBox(width: 3,)
+
                     ],
                   ):Row(
                     children: [  Text(widget.Username,
-                        style: const TextStyle(
+                        style: TextStyle(
+                          color: themeColors[6],
                             fontFamily: 'PlaywriteCU',
                             fontSize: 30)
                     )
@@ -142,18 +147,18 @@ class _ChatRoomState extends State<ChatRoom> {
             children: [
               Text(
                 widget.Username,
-                style: const TextStyle( fontFamily: 'PlaywriteCU'),
+                style:  TextStyle( fontFamily: 'PlaywriteCU',color: themeColors[6]),
               ),
               const SizedBox(width: 3,),
               Icon(
                 widget.isverfies ? Icons.verified_rounded : null,
-                color: Colors.black87,
+                color: Colors.blueAccent,
                 size: 18,
               )
             ],
           ),
         ),
-        backgroundColor: Colors.grey[300],
+        backgroundColor: themeColors[0],
       ),
       body: Column(
         children: [
@@ -190,6 +195,7 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   Widget _buildMessageItem(DocumentSnapshot doc) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     final width = MediaQuery.of(context).size.width;
     final contwidth = width - (width / 5);
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -214,7 +220,7 @@ class _ChatRoomState extends State<ChatRoom> {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
-                color: isCurrentuser ? Colors.grey[300] : Colors.white,
+                color: isCurrentuser ?themeColors[10] : themeColors[9],
               ),
               child: Column(
                 children: [
@@ -229,8 +235,8 @@ class _ChatRoomState extends State<ChatRoom> {
                       fontWeight: FontWeight.w400,
                       fontSize: 10,
                       color: isCurrentuser
-                          ? (isMsgseen ? Colors.brown : Colors.grey[600])
-                          : Colors.grey[500],
+                          ?(isMsgseen ? themeColors[13] :themeColors[11])
+                          : themeColors[12],
                     ),
                   ),
                 ],
@@ -287,7 +293,9 @@ class _ChatRoomState extends State<ChatRoom> {
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 10,
-                          color: Colors.grey[500],
+                          color: isCurrentuser
+                              ? (isMsgseen ? themeColors[13] :themeColors[11])
+                              : themeColors[12],
                              fontFamily: 'PlaywriteCU'
 
                         ),
@@ -312,10 +320,10 @@ class _ChatRoomState extends State<ChatRoom> {
 
           Container(
             constraints: BoxConstraints(maxWidth: contwidth),
-            padding: const EdgeInsets.all(8),
+            padding:  EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
-              color: isCurrentuser ? Colors.grey[300] : Colors.white,
+              color: isCurrentuser ? themeColors[10] : themeColors[9],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -325,7 +333,7 @@ class _ChatRoomState extends State<ChatRoom> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
-                    color: Colors.grey[800],
+                    color:isCurrentuser ? themeColors[11]:themeColors[12],
                       fontFamily: 'PlaywriteCU'
                   ),
                 ),
@@ -336,8 +344,8 @@ class _ChatRoomState extends State<ChatRoom> {
                     fontWeight: FontWeight.w400,
                     fontSize: 10,
                     color: isCurrentuser
-                        ? (isMsgseen ? Colors.brown : Colors.grey[600])
-                        : Colors.grey[500],
+                        ? (isMsgseen ? themeColors[13] :themeColors[11])
+                        : themeColors[12],
                   ),
                 ),
               ],
@@ -349,47 +357,73 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   Widget _builduserInput() {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
+        crossAxisAlignment:!_isRecording? CrossAxisAlignment.end:CrossAxisAlignment.center,
           mainAxisAlignment: _isRecording?MainAxisAlignment.end:MainAxisAlignment.center,
         children: [
           _isRecording? const IconButton(onPressed: null, icon:Icon(Icons.fiber_manual_record,
           color: Colors.redAccent,
           ))
-              : IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              showMenu(color: Colors.grey[100],
+              : Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: GestureDetector(
+                  onTap:   () {
+                showMenu(
+                color: themeColors[1],
                 context: context,
-                position: const RelativeRect.fromLTRB(00, 550, 0, 0),
+                position: const RelativeRect.fromLTRB(0, 550, 0, 0),
                 items: [
-                   PopupMenuItem(
-                    onTap: _pickImage,
-                    value: 'option1',
-                    child: const Row(children: [
-                      Icon(Icons.photo),
-                      Text('Media',style: TextStyle( fontFamily: 'PlaywriteCU'),)
-                    ],)
-                  ),
-                  const PopupMenuItem(
-                    value: 'option2',
-                    child: Row(children: [
-                      Icon(Icons.file_copy),
-                      Text('Document',style: TextStyle( fontFamily: 'PlaywriteCU'))
-                    ],)
-                  ),
-                  const PopupMenuItem(
-                    value: 'option3',
-                    child: Row(children: [
-                      Icon(Icons.add_location),
-                      Text('Location',style: TextStyle( fontFamily: 'PlaywriteCU'))
-                    ],)
-                  ),
+                PopupMenuItem(
+                onTap: _pickImage,
+                value: 'option1',
+                child: Row(
+                children: [
+                Icon(Icons.photo,color: themeColors[6],),
+                SizedBox(width: 2,),
+                Text('Media', style: TextStyle(fontFamily: 'PlaywriteCU',color: themeColors[6])),
                 ],
-              );
-            },
-          ),
+                ),
+                ),
+                 PopupMenuItem(
+                value: 'option2',
+                child: Row(
+                children: [
+                Icon(Icons.file_copy,color: themeColors[6],),
+                  SizedBox(width: 2,),
+                Text('Document', style: TextStyle(fontFamily: 'PlaywriteCU',color: themeColors[6])),
+                ],
+                ),
+                ),
+                 PopupMenuItem(
+                value: 'option3',
+                child: Row(
+                children: [
+                Icon(Icons.add_location,color: themeColors[6],),
+                  SizedBox(width: 2,),
+                Text('Location', style: TextStyle(fontFamily: 'PlaywriteCU',color:themeColors[6])),
+                ],
+                ),
+                ),
+                ],
+                );
+                },
+                  child: Container(
+                              padding: EdgeInsets.all(10), // Padding inside the container
+                              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10), // Border radius of 10
+                  color: themeColors[0], // Background color for the container
+                              ),
+                              child:
+                  Icon(Icons.attach_file, color: themeColors[6]),
+
+
+                            ),
+                ),
+              ),
+
           Expanded(
             child:    _isRecording?
                  SizedBox(
@@ -407,16 +441,35 @@ class _ChatRoomState extends State<ChatRoom> {
                  ):
 
             TextField(
-             minLines: 1,
-             maxLines: 5,
-              controller: tosend,
+            cursorColor:themeColors[6] ,
+              minLines: 1,
+              maxLines: 5,
+              style: TextStyle(color: themeColors[6]),
               decoration: InputDecoration(
+
                 hintText: 'Type a message',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                  hintStyle:  TextStyle(
+                      fontFamily: 'PlaywriteCU',
+                      color: themeColors[15]
+                  ),
+                  border: InputBorder.none,
+                  filled: true,
+                  fillColor: themeColors[14],
+                  enabledBorder:  OutlineInputBorder(
+                    borderRadius:  BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                        color:  themeColors[6],
+                        width: 1
+                    ),
+                  ),
+                  focusedBorder:OutlineInputBorder(
+                    borderSide: BorderSide(color: themeColors[0]),
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  )
               ),
-            ),
+
+              controller:tosend,
+            )
           ),
           Padding(
             padding: const EdgeInsets.all(5.0),
@@ -424,7 +477,7 @@ class _ChatRoomState extends State<ChatRoom> {
               padding: const EdgeInsets.all(1),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.grey[300],
+                color:   themeColors[0],
               ),
               child:
                  Padding(
@@ -435,11 +488,12 @@ class _ChatRoomState extends State<ChatRoom> {
                      child: Icon(
                        Icons.mic,
                       size: _isRecording?38:28,
+                      color: themeColors[6],
                      ),
                    ):
                    GestureDetector(
                      onTap: sendMessage,
-                     child: const Icon(Icons.send_sharp,
+                     child:  Icon(Icons.send_sharp,color: themeColors[6],
                      size:28,),
                    )
                  ),

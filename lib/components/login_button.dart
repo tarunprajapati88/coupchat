@@ -1,3 +1,4 @@
+import 'package:coupchat/components/themes.dart';
 import 'package:flutter/material.dart';
 
 class LoginButton extends StatelessWidget {
@@ -9,6 +10,7 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
       width: screenWidth,
@@ -17,10 +19,11 @@ class LoginButton extends StatelessWidget {
           color:color ,
         borderRadius: const BorderRadius.all(Radius.circular(8)),
       ),
-      child:  Center(child: Text( name,style: const TextStyle(
+      child:  Center(child: Text( name,style:  TextStyle(
         fontSize: 15,
         fontWeight:FontWeight.w500 ,
-          fontFamily: 'PlaywriteCU'
+          fontFamily: 'PlaywriteCU',
+        color: themeColors[6]
       ),)),
     );
   }

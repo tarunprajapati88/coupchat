@@ -59,6 +59,8 @@ dependencies:
   flutter_notification_channel: ^3.1.0
   flutter_local_notifications: ^18.0.1
   launcher_name: ^1.0.2
+  shared_preferences: ^2.3.4
+  flutter_dotenv: ^5.2.1
 
 launcher_name:
   default: "linq"
@@ -70,9 +72,14 @@ flutter_icons:
 
 
 flutter_native_splash:
-  color: "#EEEEEE"
-  image: assets/CoupChat.png
+  color: "#ffffff"
+  image: assets/linq.png
   android: true
+  android_12:
+    image: assets/linq.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/linq.png
+    icon_background_color_dark: "#121212"
 
 dev_dependencies:
   flutter_test:
@@ -98,6 +105,7 @@ flutter:
 
 
   assets:
+      - .env
       - assets/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

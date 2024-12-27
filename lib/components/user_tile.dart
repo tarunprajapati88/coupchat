@@ -1,4 +1,5 @@
 import 'package:coupchat/components/prfofile_photo.dart';
+import 'package:coupchat/components/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +22,7 @@ class Usertile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     final tilelen = MediaQuery.of(context).size.height;
     final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -36,7 +38,7 @@ class Usertile extends StatelessWidget {
         child: Container(
           height: tilelen / 11,
           decoration: BoxDecoration(
-          color: !isCurrentUser && latestMsg['seen'] == !true? Colors.green[50]:Colors.white,
+          color: themeColors[3],
             borderRadius: BorderRadius.circular(5),
           ),
           child: Row(
@@ -63,7 +65,8 @@ class Usertile extends StatelessWidget {
                             children: [
                               Text(
                                 text,
-                                style: const TextStyle(
+                                style:  TextStyle(
+                                  color:themeColors[7] ,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w500,
                                     fontFamily: 'PlaywriteCU'
@@ -92,19 +95,19 @@ class Usertile extends StatelessWidget {
                             latestMsg['message'] ?? "",
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
-                            style: const TextStyle(color: Colors.black54, fontFamily: 'PlaywriteCU'),
+                            style:  TextStyle(color: themeColors[7], fontFamily: 'PlaywriteCU'),
                           ),
                         ),
-                        if(latestMsg['type']=='voicenote') const Row(
+                        if(latestMsg['type']=='voicenote')  Row(
                           children: [
                             Icon(Icons.mic_none_sharp,color: Colors.grey,size: 18,),
-                            Text('Voicenote',style: TextStyle( fontFamily: 'PlaywriteCU'),),
+                            Text('Voicenote',style: TextStyle( fontFamily: 'PlaywriteCU',color: themeColors[7]),),
                           ],
                         ),
-                        if(latestMsg['type']=='image')  const Row(
+                        if(latestMsg['type']=='image')   Row(
                           children: [
                             Icon(Icons.image,color: Colors.grey,size: 18,),
-                            Text('Image',style: TextStyle( fontFamily: 'PlaywriteCU'),),
+                            Text('Image',style: TextStyle( fontFamily: 'PlaywriteCU',color: themeColors[7]),),
                           ],
                         ),
                       ],
@@ -116,20 +119,20 @@ class Usertile extends StatelessWidget {
                           latestMsg['message'] ?? "",
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
-                            style: const TextStyle(color: Colors.black54, fontFamily: 'PlaywriteCU'),
+                            style:  TextStyle(color: themeColors[7], fontFamily: 'PlaywriteCU',),
                         ),
                         )  :
                         latestMsg['type']=='voicenote'?
-                          const Row(
+                           Row(
                            children: [
                         Icon(Icons.mic_none_sharp,color: Colors.grey,size: 18,),
-                       Text('Voicenote',style: TextStyle( fontFamily: 'PlaywriteCU'),),
+                       Text('Voicenote',style: TextStyle( fontFamily: 'PlaywriteCU',color: themeColors[7]),),
                        ],
                         ):
-                        const Row(
+                         Row(
                                children: [
                                 Icon(Icons.image,color: Colors.grey,size: 18,),
-                         Text('Image',style: TextStyle( fontFamily: 'PlaywriteCU'),),
+                         Text('Image',style: TextStyle( fontFamily: 'PlaywriteCU',color:themeColors[7] ),),
                               ],
                             )
 
@@ -147,20 +150,20 @@ class Usertile extends StatelessWidget {
                             latestMsg['message'] ?? "",
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
-                            style: const TextStyle(color: Colors.black54, fontFamily: 'PlaywriteCU'),
+                            style: TextStyle(color: themeColors[7], fontFamily: 'PlaywriteCU'),
                           ),
                         ),
-                        if(latestMsg['type']=='voicenote') const Row(
+                        if(latestMsg['type']=='voicenote')  Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Icon(Icons.mic_none_sharp,color: Colors.grey,size: 18,),
-                            Text('Voicenote',style: TextStyle( fontFamily: 'PlaywriteCU'),),
+                            Text('Voicenote',style: TextStyle( fontFamily: 'PlaywriteCU',color: themeColors[7]),),
                           ],
                         ),
-                        if(latestMsg['type']=='image')  const Row(
+                        if(latestMsg['type']=='image') Row(
                           children: [
                             Icon(Icons.image,color: Colors.grey,size: 18,),
-                            Text('Image',style: TextStyle( fontFamily: 'PlaywriteCU'),),
+                            Text('Image',style: TextStyle( fontFamily: 'PlaywriteCU',color: themeColors[7]),),
                           ],
                         ),
 

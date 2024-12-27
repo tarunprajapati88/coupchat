@@ -1,3 +1,4 @@
+import 'package:coupchat/components/themes.dart';
 import 'package:flutter/material.dart';
 
 class MyTextfield extends StatelessWidget {
@@ -17,28 +18,30 @@ class MyTextfield extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return TextField(
+      style: TextStyle(color: themeColors[16]),
       decoration: InputDecoration(
-        hintStyle: const TextStyle(
-          color: Colors.grey,
+        hintStyle:  TextStyle(
+          color: themeColors[15],
             fontFamily: 'PlaywriteCU'
         ),
         border: InputBorder.none,
        filled: true,
-        fillColor: Colors.grey.shade100,
+        fillColor:themeColors[14],
         hintText: name,
         helperStyle: const TextStyle( fontFamily: 'PlaywriteCU'),
         prefixIcon: icon,
-        prefixIconColor: Colors.grey,
-        enabledBorder: const OutlineInputBorder(
+        prefixIconColor: themeColors[15],
+        enabledBorder: OutlineInputBorder(
           borderRadius:  BorderRadius.all(Radius.circular(8)),
           borderSide: BorderSide(
-            color: Colors.white,
-            width: 2
+            color: themeColors[0],
+            width: 1
           ),
         ),
         focusedBorder:OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade400),
+          borderSide: BorderSide(color:themeColors[0]),
           borderRadius: const BorderRadius.all(Radius.circular(8)),
         )
       ),

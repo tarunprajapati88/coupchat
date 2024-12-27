@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../components/loading.dart';
 import '../components/login_button.dart';
 import '../components/textfield.dart';
+import '../components/themes.dart';
 import 'home_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -98,11 +99,12 @@ class _ProfilePageState extends State<ProfilePage> {
   }
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor:themeColors[1],
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade200,
-        title: const Text('Create Profile',style: TextStyle( fontFamily: 'PlaywriteCU',),),
+        backgroundColor: themeColors[0],
+        title:  Text('Create Profile',style: TextStyle( fontFamily: 'PlaywriteCU',color: themeColors[6]),),
       ),
       body: Stack(
         children: [
@@ -161,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   GestureDetector(
                     child: LoginButton(
                       name: 'Done',
-                      color: Colors.grey.shade400,
+                      color: themeColors[0],
                     ),
                     onTap: () {
                       _saveProfile(widget.documerntReference, widget.userid);

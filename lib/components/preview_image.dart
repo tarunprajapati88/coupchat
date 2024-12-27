@@ -1,3 +1,4 @@
+import 'package:coupchat/components/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -8,14 +9,16 @@ class ImagePreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return Scaffold(
+      backgroundColor: themeColors[1],
       appBar: AppBar(
-        title: const Text(
+        title:  Text(
           "Image Preview",
-          style: TextStyle(color: Colors.white, fontFamily: 'PlaywriteCU'),
+          style: TextStyle(color: themeColors[6], fontFamily: 'PlaywriteCU'),
         ),
-        backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: themeColors[0],
+        iconTheme: IconThemeData(color: themeColors[6]),
       ),
       body: InteractiveViewer(
         child: Center(

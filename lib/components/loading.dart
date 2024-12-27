@@ -1,3 +1,4 @@
+import 'package:coupchat/components/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -6,6 +7,7 @@ class Loading  extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LoadingAnimationWidget.flickr(size: 40, leftDotColor: Colors.black, rightDotColor: Colors.grey);
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
+    return LoadingAnimationWidget.flickr(size: 40, leftDotColor: themeColors[0], rightDotColor: themeColors[6]);
   }
 }

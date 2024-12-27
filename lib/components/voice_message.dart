@@ -1,3 +1,4 @@
+import 'package:coupchat/components/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -59,6 +60,7 @@ class _VoiceMessageState extends State<VoiceMessage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return Container(
       padding: const EdgeInsets.all(2),
       margin: const EdgeInsets.symmetric(vertical: 3),
@@ -88,8 +90,9 @@ class _VoiceMessageState extends State<VoiceMessage> {
 
               return IconButton(
                color: Colors.grey,
-                highlightColor: Colors.greenAccent,
+                highlightColor: themeColors[1],
                 icon: Icon(
+                  color: Colors.black,
                   isPlaying && processingState != ProcessingState.completed
                       ? Icons.pause
                       : Icons.play_arrow,
@@ -102,8 +105,8 @@ class _VoiceMessageState extends State<VoiceMessage> {
             child: Column(
               children: [
                 Slider(
-                  inactiveColor: Colors.grey,
-                  activeColor: Colors.greenAccent,
+                  inactiveColor:Colors.grey[400],
+                  activeColor: themeColors[1],
                   min: 0,
                   max: _totalDuration.inSeconds.toDouble(),
                   value: _currentPosition.inSeconds

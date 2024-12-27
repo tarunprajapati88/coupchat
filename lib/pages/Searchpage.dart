@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import '../components/chached_image.dart';
 import '../components/searchuserTile.dart';
+import '../components/themes.dart';
 import 'chat_room.dart';
 
 class SearchPage extends StatefulWidget {
@@ -77,8 +78,9 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor:themeColors[1],
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -86,27 +88,30 @@ class _SearchPageState extends State<SearchPage> {
             SizedBox(
               height: 45,
               child: TextField(
+                style: TextStyle(color: themeColors[15]),
                 controller: _controller,
                 onChanged: (value) {
                   setState(() {
                     searchQuery = value.trim().toLowerCase();
                   });
                 },
+
                 decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  enabledBorder: const OutlineInputBorder(
+                  filled: true,
+                  fillColor: themeColors[14],
+                  enabledBorder:  OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
-                    borderSide: BorderSide(color: Colors.grey, width: 2),
+                    borderSide: BorderSide(color: themeColors[6], width: 1),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey.shade400),
+                    borderSide: BorderSide(color: themeColors[0]),
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                   ),
                   hintText: 'Search Users...',
-                  hintStyle: const TextStyle(color: Colors.grey, fontFamily: 'PlaywriteCU'),
-                  prefixIcon: const Icon(Icons.search),
+                  hintStyle:  TextStyle(color: themeColors[15], fontFamily: 'PlaywriteCU'),
+                  prefixIcon:  Icon(Icons.search,color: themeColors[15],),
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
+                    icon:  Icon(Icons.clear,color: themeColors[15],),
                     onPressed: () {
                       _controller.clear();
                       setState(() {
@@ -123,7 +128,7 @@ class _SearchPageState extends State<SearchPage> {
             const SizedBox(height: 10),
             Expanded(
               child: searchQuery == null || searchQuery!.isEmpty
-                  ? const Center(child: Text('Enter text to search',style: TextStyle( fontFamily: 'PlaywriteCU'),))
+                  ?  Center(child: Text('Enter text to search',style: TextStyle( fontFamily: 'PlaywriteCU',color: themeColors[6]),))
                   : FutureBuilder<List<DocumentSnapshot>>(
                 future: _searchUsers(searchQuery!),
                 builder: (context, snapshot) {
@@ -134,7 +139,7 @@ class _SearchPageState extends State<SearchPage> {
                   }
 
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('No users found.',style: TextStyle( fontFamily: 'PlaywriteCU'),));
+                    return  Center(child: Text('No users found.',style: TextStyle( fontFamily: 'PlaywriteCU',color:themeColors[6] ),));
                   }
 
                   final userDocs = snapshot.data!;
@@ -183,7 +188,8 @@ class _SearchPageState extends State<SearchPage> {
                                   verfied: userData['Isverified'] ?Row(
                                     children: [
                                       Text(userData['username'],
-                                        style:  const TextStyle(
+                                        style:   TextStyle(
+                                          color: themeColors[6],
                                             fontFamily: 'PlaywriteCU',
                                             fontSize: 30),),
 
@@ -192,7 +198,8 @@ class _SearchPageState extends State<SearchPage> {
                                     ],
                                   ):Row(
                                     children: [  Text(userData['username'],
-                                      style: const TextStyle(
+                                      style: TextStyle(
+                                        color: themeColors[6],
                                           fontFamily: 'PlaywriteCU',
                                           fontSize: 30)
                                     )

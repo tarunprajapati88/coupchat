@@ -8,6 +8,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import '../components/loading.dart';
 import '../components/login_button.dart';
+import '../components/themes.dart';
 import 'home_page.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
@@ -43,11 +44,13 @@ class _EditProfileState extends State<EditProfile> {
   @override
   @override
   Widget build(BuildContext context) {
+    List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor:themeColors[1],
       appBar: AppBar(
-        backgroundColor: Colors.grey[300],
-        title: const Text('Edit Profile',style: TextStyle(fontFamily: 'PlaywriteCU',),),
+        iconTheme: IconThemeData(color:themeColors[6]),
+        backgroundColor: themeColors[0],
+        title: Text('Edit Profile',style: TextStyle(fontFamily: 'PlaywriteCU',color:themeColors[6] ),),
       ),
       body: Stack(
         children: [
@@ -104,7 +107,7 @@ class _EditProfileState extends State<EditProfile> {
                   const SizedBox(height: 10),
                   GestureDetector(
                     child:  LoginButton(
-                      name: 'Save', color: _ischanged? Colors.blueAccent:Colors.grey.shade400,
+                      name: 'Save', color: _ischanged? Colors.blueAccent:themeColors[0],
                     ),
                     onTap: () {
                       _saveProfile(widget.documentReference, widget.userid);
