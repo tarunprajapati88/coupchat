@@ -22,10 +22,7 @@ class PushNotificationService {
     "auth_provider_x509_cert_url": dotenv.env['FIREBASE_AUTH_PROVIDER_CERT'],
     "client_x509_cert_url": dotenv.env['FIREBASE_CLIENT_CERT'],
     "universe_domain": dotenv.env['FIREBASE_UNIVERSE_DOMAIN']
-  }
-
-
-  ;
+  };
 
   static Future<String> getAccessToken() async {
     final List<String> scopes = ["https://www.googleapis.com/auth/firebase.messaging"];
@@ -36,7 +33,6 @@ class PushNotificationService {
     await auth.obtainAccessCredentialsViaServiceAccount(credentials, scopes, http.Client());
     return accessCredentials.accessToken.data;
   }
-
   static Future<void> sendPushNotification({
     required String targetToken,
     required String title,
@@ -48,7 +44,6 @@ class PushNotificationService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken',
       };
-
       final Map<String, dynamic> notificationPayload = {
         "message": {
           "token": targetToken,
@@ -69,7 +64,6 @@ class PushNotificationService {
           },
         },
       };
-
       final http.Response response = await http.post(
         Uri.parse(fcmUrl!),
         headers: headers,

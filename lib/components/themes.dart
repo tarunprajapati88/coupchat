@@ -291,8 +291,7 @@ class ThemeManager {
     Color.fromARGB(255, 3, 55, 47),     // 10: Current user container (deep green)
     Color.fromARGB(255, 220, 240, 230), // 11: Current user text (off-white greenish)
     Color.fromARGB(255, 220, 240, 230), // 12: Sender text color (off-white greenish)
-    Color.fromARGB(255, 34, 153, 129) // Brighter shade of teal-green
-    ,
+    Color.fromARGB(255, 34, 153, 129), // Brighter shade of teal-green,
     Color.fromARGB(255, 2, 41, 35),     // 14: Text field background (dark green)
     Colors.grey,     // 15: Text field items (muted bright green)
     Color.fromARGB(255, 200, 220, 210), // 16: Login page text (soft muted greenish-white)
@@ -311,7 +310,7 @@ class ThemeManager {
     Color.fromARGB(255, 255, 87, 51), // 9: Sender container (light orange)
     Color.fromARGB(255, 255, 204, 153) ,   // 10: Current user container (bright red-orange)
     Color.fromARGB(255, 102, 34, 17),   // 11: Current user text (dark brown)
-   Colors.white                    ,    // 12: Sender text color (dark burnt orange)
+    Colors.white                    ,    // 12: Sender text color (dark burnt orange)
     Color.fromARGB(255, 204, 68, 34),   // 13: Seen message (medium red-brown)
     Color.fromARGB(255, 255, 235, 215), // 14: Text field background (soft peach)
     Color.fromARGB(255, 204, 85, 51),   // 15: Text field items (reddish-brown)
@@ -347,7 +346,6 @@ class ThemeManager {
     await prefs.setInt('themeIndex', index);
     currentThemeIndex = index;
   }
-
 
   static List<Color> getThemeColors(int index) {
     switch (index) {

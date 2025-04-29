@@ -1,4 +1,3 @@
-
 import 'package:coupchat/firebase_options.dart';
 import 'package:coupchat/pages/home_page.dart';
 import 'package:coupchat/pages/signup_page.dart';

@@ -20,10 +20,7 @@ class ChatService {
     });
   }
 
-
-
   Future<DocumentReference>sendMessage(String reciverId,message, bool seen,String targetToken,String name)async{
-
     final String currentUserId=_auth.currentUser!.uid;
     final String currentUserEmail=_auth.currentUser!.email!;
     final Timestamp timestamp=Timestamp.now();
@@ -50,8 +47,6 @@ class ChatService {
 
 }
 
-
-
   Future<DocumentReference>sendVoiceNote(String reciverId,url, bool seen,String targetToken,name)async{
     final String currentUserId=_auth.currentUser!.uid;
     final String currentUserEmail=_auth.currentUser!.email!;
@@ -65,7 +60,6 @@ class ChatService {
       timestamp: timestamp,
       seen: seen,
       type: 'voicenote',
-
     );
     List<String>ids =[currentUserId,reciverId];
     ids.sort();
@@ -96,25 +90,17 @@ class ChatService {
 
   Future<String> uploadImage(File imageFile) async {
     try {
-
       String fileName = '${DateTime.now().millisecondsSinceEpoch}_chat_image.jpg';
-
-
       Reference storageRef = _storage.ref().child('chat_images/$fileName');
-
-
       UploadTask uploadTask = storageRef.putFile(imageFile);
       TaskSnapshot snapshot = await uploadTask;
-
-
       String downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
-    } catch (e) {
+    }
+    catch (e) {
       throw Exception("Image upload failed: ${e.toString()}");
     }
   }
-
-
 
   Future<DocumentReference>sendMedia(String reciverId,url, bool seen,String targetToken,name)async{
     final String currentUserId=_auth.currentUser!.uid;
@@ -141,7 +127,8 @@ class ChatService {
         .add(newMessage.tomap());
     return docRef;
   }
-Stream<QuerySnapshot>getMessage(String userID,otheruserID){
+
+  Stream<QuerySnapshot>getMessage(String userID,otheruserID){
   List<String>ids =[userID,otheruserID];
   ids.sort();
   String chatroomId =ids.join('_');
@@ -150,6 +137,5 @@ Stream<QuerySnapshot>getMessage(String userID,otheruserID){
       .doc(chatroomId).collection('message')
       .orderBy('timestamp',descending: false)
       .snapshots();
-}
-
+   }
 }

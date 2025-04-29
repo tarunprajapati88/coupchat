@@ -23,7 +23,6 @@ class _HomePageState extends State<HomePage> {
 
   int currentPageIndex = 0;
 
-
   @override
   Widget build(BuildContext context) {
     List<Color> themeColors = ThemeManager.getThemeColors(ThemeManager.currentThemeIndex);
